@@ -33,7 +33,7 @@ To define a local PC2-based reference interval and equation, perform the followi
 1. Define a local "non-MG" cohort.
 2. Create a CSV file with X rows and 2 columns.
 - Each row should contain a unique sFLC sample from the non-MG cohort. 
-- The left and right columns should contain kappa and lambda sFLC values, respectively. 
+- The left and right columns should be named "kappa" and "lambda" and contain kappa and lambda sFLC values, respectively. 
 - Place the CSV file into the "Data" directory of the repository. 
 3. Run pc_clonality.py with the "-n" flag followed by the filename of CSV file created in Step 1. For example:
 
@@ -47,7 +47,7 @@ The diagnostic performance of the PC2 metric and interval can be evaluated using
 1. Define a local "MG" cohort.
 2. Create a CSV file with X rows and 2 columns.
 - Each row should contain a unique sFLC sample from the MG cohort. 
-- The left and right columns should contain kappa and lambda sFLC values, respectively. 
+- The left and right columns should be named "kappa" and "lambda" and contain kappa and lambda sFLC values, respectively. 
 - Place the CSV file into the "Data" directory of the repository. 
 3. To use evaluate diagnostic performance using a locally-defined PC2 metric and interval, run:
 
@@ -64,9 +64,9 @@ To use the WashU-derived PC2 metric and interval, simply run the above while omi
 PC-clonality-index provides a function for calculating the PC2 metric for new cases based on their kappa and lambda sFLC results. Similar to use case #2, this use case can be performed using the PC2 metric and interval derived from either 1) a locally-defined PC2 metric equation and reference interval, or 2) the PC2 metric and interval derived using the WashU non-MG cohort. To calculate the PC2 metric for new cases using either of  these methods, perform the following steps:
 1. Create a CSV file with X rows and 2 columns.
 - Each row should contain a unique sFLC sample. 
-- The left and right columns should contain kappa and lambda sFLC values, respectively. 
+- The left and right columns should be named "kappa" and "lambda" and contain kappa and lambda sFLC values, respectively. 
 - Place the CSV file into the "Data" directory of the repository. 
-2. To calculate the PC2 metric using a locally-defined PC2 metric and interval, run:
+3. To calculate the PC2 metric using a locally-defined PC2 metric and interval, run:
 ```python pc_clonality.py -n "your_non_MG_cohort_filename.csv" -c "your_cases_filename.csv"```
 
 To use the WashU-derived PC2 metric and interval, simply run the above while omitting the -n flag:
