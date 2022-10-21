@@ -82,7 +82,7 @@ Use cases 1, 2, and 3 can be combined into one step. For example, to define a lo
 ```python pc_clonality.py -n "your_non_MG_cohort_filename.csv" -m "your_MG_cohort_filename.csv" -c "your_cases_filename.csv"```
 
 ### Defining custom interval bounds
-By default, PC-clonality-index will calculate the PC2-metric-based reference interval using a 95% (2.5-97.5%ile) diagnostic interval. These bounds can be customized by providing "-l" and -u" flags. For example, to define a PC2 reference interval using a 90% diagnostic interval, run the following:
+By default, PC-clonality-index will calculate the PC2-metric-based reference interval using a 95% (2.5-97.5%ile) diagnostic interval. These bounds can be customized by providing "-l" and -u" flags. For example, to define the PC2 metric equation and a corresponding 90% reference interval, run the following:
 
 ```python pc_clonality.py -n "your_non_MG_cohort_filename.csv" -l 5 -u 95```
 
