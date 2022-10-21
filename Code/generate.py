@@ -89,7 +89,7 @@ def equation(df_nonmg, X_normal, z_transform, pc_transform):
 	return(equation_dict)
 	
 #%%    
-def plot_cohorts(X_normal, PCA_RI, z_transform, pc_transform):
+def plot_cohorts(X_normal, PCA_RI, z_transform, pc_transform, output_path):
 
     Katz_lb=0.26
     Katz_ub=1.65
@@ -116,7 +116,6 @@ def plot_cohorts(X_normal, PCA_RI, z_transform, pc_transform):
     ax.plot(Katz_UB[:,0],Katz_UB[:,1],color='k', linestyle=':')
     LB=log_transform(z_transform(pc_transform(PCA_LB,inverse=True),inverse=True),inverse=True)
     UB=log_transform(z_transform(pc_transform(PCA_UB,inverse=True),inverse=True),inverse=True)
-    print(LB)
     if isinstance(LB,np.ndarray):
         ax.plot(LB[:,0],LB[:,1],'--k')
     if isinstance(UB,np.ndarray):
@@ -124,4 +123,4 @@ def plot_cohorts(X_normal, PCA_RI, z_transform, pc_transform):
     line_katz = Line2D([0,1],[0,1],linestyle=':', color='black')
     line_pc2 = Line2D([0,1],[0,1],linestyle='--', color='black')
     ax.legend([line_katz, line_pc2],['Katzmann', 'PC2'])
-    plt.savefig('fig1.png')
+    plt.savefig(output_path+'/fig1.png')

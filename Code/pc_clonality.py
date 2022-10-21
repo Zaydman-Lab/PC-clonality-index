@@ -9,38 +9,34 @@ import embed
 import matplotlib.pyplot as plt
 
 #%%
-def generate_embedding(nonmg_path):
-    ## if user passes non-MG cohort csv, will create embedding,
-    ## return RI, equation, and plot based on inputted data
-    ## if user does not pass non-MG cohort, embedding, 
-    ## RI, equation and plot will be based on WU data
+def generate_embedding(nonmg_path,lb,ub,output_path):
+    '''input: nonmg_path, lb, ub
+    output: PCA_RI, equation_dict, X_normal, z_transform, pc_transform'''
 
 
     df_nonmg = generate.load_func(nonmg_path)
     X_normal = generate.create_nparray(df_nonmg)
     z_transform, pc_transform = generate.generate_transforms(X_normal)
     pc2_col_norm = generate.calc_pc2(X_normal, z_transform, pc_transform)
-    PCA_RI = generate.pc2_interval(2.5, 97.5, pc2_col_norm)
+    PCA_RI = generate.pc2_interval(lb, ub, pc2_col_norm)
     equation_dict=generate.equation(df_nonmg, X_normal, z_transform, pc_transform)
-    generate.plot_cohorts(X_normal, PCA_RI, z_transform, pc_transform)
+    generate.plot_cohorts(X_normal, PCA_RI, z_transform, pc_transform, output_path)
     return(PCA_RI, equation_dict, X_normal, z_transform, pc_transform)
 
 #%%
 def evaluate_ri(X_normal, RI, pc_transform, z_transform, mg_path=None):
-    ## optional. If MG cohort is not passed, only specificity will be calculated.
-    ## if both MG and non-MG cohorts passed, both sens. and spec. will be calculated.
-    ## if either cohort contains a creatinine column, performance will be broken out
-    ## by eGFR
+    '''input: X_normal, RI, pc_transform, z_transform, mg_path
+    output: SeFLC, SpFLC, SePC, SpPC'''
 
-    ## is eGFR is not included
     lb=0.26
     ub=1.65
     df_abnormal=generate.load_func(mg_path)
     X_abnormal=generate.create_nparray(df_abnormal)
     if X_normal.shape[1]==2 and X_abnormal.shape[1]==2:
-        SeFLC, SpFLC = evaluate.SeSp_sFLCR(X_normal,lb,ub,X_abnormal)
-        SePC, SpPC = evaluate.SeSp_PCA(X_normal,RI,pc_transform,z_transform,X_abnormal)
-        return(SeFLC, SpFLC, SePC, SpPC)
+        performance_dict = evaluate.SeSp_sFLCR(X_normal,lb,ub,X_abnormal)
+        PC_performance_dict = evaluate.SeSp_PCA(X_normal,RI,pc_transform,z_transform,X_abnormal)
+        performance_dict.update(PC_performance_dict)
+        return(performance_dict)
 
 #%%
 def embed_cases(cases_path,z_transform, pc_transform, PCA_RI):
@@ -52,7 +48,8 @@ def embed_cases(cases_path,z_transform, pc_transform, PCA_RI):
 
 #%%
 def main():
-    path = os.getcwd()
+    data_path=os.path.dirname(os.path.dirname(__file__))+'/Data'
+    output_path=os.path.dirname(os.path.dirname(__file__))+'/Output'
     parser = OptionParser()
 
     parser.add_option("-n", "--nonmg",
@@ -63,35 +60,47 @@ def main():
                     help = "MG cohort csv filename")   
     parser.add_option("-c", "--cases",
                     dest = "cases_fn",
-                    help = "cases for embedding csv filename")    
+                    help = "cases for embedding csv filename")  
+    parser.add_option("-l", "--lower",
+                    dest = "user_lb",
+                    help = "user-defined lower bound")  
+    parser.add_option("-u", "--upper",
+                    dest = "user_ub",
+                    help = "user-defined upper bound")    
 
     (options, args) = parser.parse_args()
 
-    ## if a non-MG cohort is passes, use that to generate embeddings
-    ## else, use the WashU cohort
     if options.nonmg_fn!=None:
-        nonmg_path = path+'/'+options.nonmg_fn+'.csv'
+        nonmg_path = data_path+'/'+options.nonmg_fn
     else:
-        nonmg_path = path+'/non_MG_wu.csv'
+        nonmg_path = data_path+'/non_MG_wu.csv'
     
     if options.mg_fn!=None:
-        mg_path = path+'/'+options.mg_fn+'.csv'
+        mg_path = data_path+'/'+options.mg_fn
     else:
         mg_path = None
 
-    PCA_RI, equation_dict, X_normal, z_transform, pc_transform = generate_embedding(nonmg_path)
-    equation_dict.update({'PCA_RI_low':PCA_RI[0], 'PCA_RI_high':PCA_RI[1]})
+    lb=2.5
+    ub=97.5
+    if options.user_lb!=None and options.user_ub!=None:
+        lb=int(options.user_lb)
+        ub=int(options.user_ub)
+
+    PCA_RI, pc_dict, X_normal, z_transform, pc_transform = generate_embedding(nonmg_path,lb,ub,output_path)
+    pc_dict.update({'PCA_RI_low':PCA_RI[0], 'PCA_RI_high':PCA_RI[1]})
+
     if mg_path!=None:
-        SeFLC, SpFLC, SePC, SpPC = evaluate_ri(X_normal, PCA_RI, pc_transform, z_transform, mg_path)
-        equation_dict.update({'SpFLC': SpFLC, 'SeFLC': SeFLC, 'SpPC': SpPC, 'SePC': SePC})
+        performance_dict=evaluate_ri(X_normal, PCA_RI, pc_transform, z_transform, mg_path)
+        performance_dict=pd.DataFrame(data=performance_dict, index=['Measure']).T
+        performance_dict.to_csv(output_path+'/performance.csv')
     
     if options.cases_fn!=None:
-        cases_path = path+'/'+options.cases_fn+'.csv'
+        cases_path = data_path+'/'+options.cases_fn
         df_cases = embed_cases(cases_path,z_transform, pc_transform, PCA_RI)
-        df_cases.to_csv('cases_pc2.to_csv',index=False)
+        df_cases.to_csv(output_path+'/cases_pc2.csv',index=False)
 
-    df_equation=pd.DataFrame(data=equation_dict, index=['var']).T
-    df_equation.to_csv('output.csv')
+    df_pc_dict=pd.DataFrame(data=pc_dict, index=['var']).T
+    df_pc_dict.to_csv(output_path+'/pc_vars.csv')
 
 if __name__ == '__main__':
     main()
