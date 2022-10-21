@@ -35,3 +35,8 @@ To define a local PC2-based reference interval and equation, perform the followi
 2. Run pc_clonality.py with the "-n" flag followed by the filename of CSV file created in Step 1. For example:
 
 ```python pc_clonality.py -n "your_non_MG_cohort_filename.csv"```
+3. Check output in the "Output" folder of the repository
+- "pc_vars.csv" will contain the PC2 interval bounds ('PCA_RI_low' and 'PCA_RI_high') as well as all of the variables needed to calculate the PC2 metric for new cases. 
+- The equation to calculate the PC2 metric for new cases takes the following form: A*((log(kappa)-kappa_mean)/kappa_std) + B((log(lambda)-lambda_mean)/lambda_std)
+
+###
