@@ -1,5 +1,5 @@
 # PC-clonality-score
-Code repository for PC clonality index package to accompany manuscript by Azimi et al
+Code repository for PC clonality index package to accompany manuscript by Azimi et al.
 
 ## Introduction
 
@@ -87,4 +87,4 @@ By default, PC-clonality-index will calculate the PC2-metric-based reference int
 ```python pc_clonality.py -n "your_non_MG_cohort_filename.csv" -l 5 -u 95```
 
 ## Contact
-For any questions, comments, or suggestions, please feel free to contact [Mark Zaydman](zaydmanm@wustl.edu) or [Vahid Azimi] (a.vahid@wustl.edu).
+For any questions, comments, or suggestions, please feel free to contact [Mark Zaydman](zaydmanm@wustl.edu) or [Vahid Azimi](a.vahid@wustl.edu).
