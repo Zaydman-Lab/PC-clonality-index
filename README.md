@@ -38,7 +38,7 @@ To define a local PC2-based reference interval and equation, perform the followi
 3. Run pc_clonality.py with the "-n" flag followed by the filename of CSV file created in Step 1. For example:
 
 ```python pc_clonality.py -n "your_non_MG_cohort_filename.csv"```
-4. Check output in the "Output" folder of the repository
+4. Inspect the output in the "Output" folder of the repository
 - "pc_vars.csv" will contain the PC2 interval bounds ('PCA_RI_low' and 'PCA_RI_high') as well as all of the variables needed to calculate the PC2 metric for new cases. 
 - The equation to calculate the PC2 metric for new cases takes the following form: A*((log(kappa)-kappa_mean)/kappa_std) + B((log(lambda)-lambda_mean)/lambda_std)
 
@@ -57,7 +57,7 @@ To use the WashU-derived PC2 metric and interval, simply run the above while omi
 
 ```python pc_clonality.py -m "your_MG_cohort_filename.csv"```
 
-4. Check output in the "Output" folder of the repository:
+4. Inspect the output in the "Output" folder of the repository:
 - "performance.csv" will contain the sensitivity and specificity for the manufacturer's sFLC-ratio-based interval ("sFLC_Sp" and "sFLC_Se") and PC2-based metric and interval ("PC_Sp", "PC_Se"). 
 
 ### Use Case 3: Calculating the PC2 metric for new cases
@@ -73,5 +73,5 @@ To use the WashU-derived PC2 metric and interval, simply run the above while omi
 
 ```python pc_clonality.py -m "your_MG_cohort_filename.csv"```
 
-3. Check output in the "Output" folder of the repository:
+3. Inspect the output in the "Output" folder of the repository:
 - "cases_pc2.csv" will contain four columns containing the kappa values, lambda values, PC2 metric, and an abnormal flag (0 for normal, 1 for abnormal) for each case, respectively. 
