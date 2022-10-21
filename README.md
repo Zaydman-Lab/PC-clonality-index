@@ -75,3 +75,16 @@ To use the WashU-derived PC2 metric and interval, simply run the above while omi
 
 3. Inspect the output in the "Output" folder of the repository:
 - "cases_pc2.csv" will contain four columns containing the kappa values, lambda values, PC2 metric, and an abnormal flag (0 for normal, 1 for abnormal) for each case, respectively. 
+
+### Combining use cases
+Use cases 1, 2, and 3 can be combined into one step. For example, to define a local PC2-based interval, evaluate the diagnostic performance, and calculate the PC2 metric for new cases, run the following:
+
+```python pc_clonality.py -n "your_non_MG_cohort_filename.csv" -m "your_MG_cohort_filename.csv" -c "your_cases_filename.csv"```
+
+### Defining custom interval bounds
+By default, PC-clonality-index will calculate the PC2-metric-based reference interval using a 95% (2.5-97.5%ile) diagnostic interval. These bounds can be customized by providing "-l" and -u" flags. For example, to define a PC2 reference interval using a 90% diagnostic interval, run the following:
+
+```python pc_clonality.py -n "your_non_MG_cohort_filename.csv" -l 5 -u 95```
+
+## Contact
+For any questions, comments, or suggestions, please feel free to contact [Mark Zaydman](zaydmanm@wustl.edu) or [Vahid Azimi] (a.vahid@wustl.edu).
