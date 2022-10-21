@@ -59,3 +59,15 @@ To use the WashU-derived PC2 metric and interval, simply run the above while omi
 4. Check output in the "Output" folder of the repository:
 - "performance.csv" will contain the sensitivity and specificity for the manufacturer's sFLC-ratio-based interval ("sFLC_Sp" and "sFLC_Se") and PC2-based metric and interval ("PC_Sp", "PC_Se"). 
 
+### Use Case 3: Calculating the PC2 metric for new cases
+PC-clonality-index provides a function for calculating the PC2 metric for new cases based on their kappa and lambda sFLC results. Similar to use case #2, this use case can be performed using the PC2 metric and interval derived from either 1) a locally-defined PC2 metric equation and reference interval, or 2) the PC2 metric and interval derived using the WashU non-MG cohort. To calculate the PC2 metric for new cases using either of  these methods, perform the following steps:
+1. Create a CSV file with X rows and 2 columns.
+- Each row should contain a unique sFLC sample. 
+- The left and right columns should contain kappa and lambda sFLC values, respectively. 
+- Place the CSV file into the "Data" directory of the repository. 
+2. To calculate the PC2 metric using a locally-defined PC2 metric and interval, run:
+```python pc_clonality.py -n "your_non_MG_cohort_filename.csv" -c "your_cases_filename.csv"```
+
+To use the WashU-derived PC2 metric and interval, simply run the above while omitting the -n flag:
+
+```python pc_clonality.py -m "your_MG_cohort_filename.csv"```
