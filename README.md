@@ -5,11 +5,15 @@ Code repository for PC clonality index package to accompany manuscript by Azimi 
 
 This package can be used to perform three use cases: 1) Derive an equation for calculating the PC2 clonality index and a corresponding reference interval using serum free light chain assay results from a non-MG cohort, as described in Azimi et al. (reference), 2) Calculate the PC2 clonality index for a set of serum free light chain results, and 3) Calculate the sensitivity and specificity of the PC2 clonality index-based reference interval and the manufacturer's sFLC-ratio-based interval using non-MG and MG cohorts. 
 
-The behavior of the program will be determined by the files and input flags you give it. "non-mg.csv" is a file you will use if you want to use your own local reference cohort for your own institutional data. The default behavior if "non_mg.csv" is not provided is to use the WashU data that was provided by the paper. The non-MG cohort will ideally consist of an sFLC result from at least 120 patients that do not have monoclonal gammopathy and have varying degrees of renal function. "MG.csv" will be used if you want to compare the sensitivity of the PC2 clonality index reference interval with the manufacturer's sFLC-ratio-based reference interval (specificity will be defined by the interval percentage specified [default 95%]). For additional details on non-MG and MG cohort definitions, please refer to Azimi et al. (reference). "cases.csv" is a file you can upload to calculate the PC clonality index for any given set of serum free light chain results. 
+The behavior of the program will be determined by the files and input flags you give it. We have provided a template file called "non-mg.csv" -- this is a file you will use if you want to use your own local reference cohort for your own institutional data. The default behavior if "non_mg.csv" is not provided is to use the WashU data that was provided by the paper. The non-MG cohort will ideally consist of an sFLC result from at least 120 patients that do not have monoclonal gammopathy and have varying degrees of renal function. "MG.csv" will be used if you want to compare the sensitivity of the PC2 clonality index reference interval with the manufacturer's sFLC-ratio-based reference interval (specificity will be defined by the interval percentage specified [default 95%]). For additional details on non-MG and MG cohort definitions, please refer to Azimi et al. (reference). "cases.csv" is a file you can upload to calculate the PC clonality index for any given set of serum free light chain results. 
 
 ## Getting Started
-### Dependencies
-- Python 3.10+
+### Environment and Dependencies
+1. [Download Conda] (https://conda.io/projects/conda/en/latest/user-guide/install/download.html) and follow [installation instructions] (https://conda.io/projects/conda/en/latest/user-guide/install/index.html#).
+2. Create the conda environment by running the .yml file:
+```conda env create -f environment.yml```
+This will create the Conda environment and install the following dependencies:
+- Python 3
 - Optparse
 - Matplotlib
 - Seaborn
