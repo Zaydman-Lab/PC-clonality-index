@@ -61,12 +61,13 @@ A*\log(\frac{(kappa)-\overline{kappa})}{\sigma{kappa}}) + B*\log(\frac{(lambda)-
 
 ### Defining custom interval bounds
 By default, PC-clonality-index will calculate the PC2-metric-based reference interval using a 95% (2.5-97.5%ile) diagnostic interval. These bounds can be customized by providing "-l" and "-u" flags. For example, to define the PC2 metric equation and a corresponding 90% reference interval, run the following:
-```python pc_clonality.py -n "your_non_MG_cohort_filename.csv" -l 5 -u 95```
+
+```python pc_clonality.py -n non_MG.csv -l 5 -u 95```
 
 ### Combining use cases
 Use cases 1, 2, and 3 can be combined into a single step. For example, to define a local PC2-based interval, evaluate the diagnostic performance, and calculate the PC2 metric for new cases, run the following:
 
-```python pc_clonality.py -n "your_non_MG_cohort_filename.csv" -m "your_MG_cohort_filename.csv" -c "your_cases_filename.csv"```
+```python pc_clonality.py -n non_MG.csv -m MG.csv -c cases.csv```
 
 ## References
 
