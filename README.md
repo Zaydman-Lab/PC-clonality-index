@@ -8,6 +8,10 @@ This package can be used to perform three use cases: 1) Derive an equation for c
 The behavior of the program will be determined by the files and input flags you give it. We have provided a template file called "non-mg.csv" -- this is a file you will use if you want to use your own local reference cohort for your own institutional data. The default behavior if "non_mg.csv" is not provided is to use the WashU data that was provided by the paper. The non-MG cohort will ideally consist of an sFLC result from at least 120 patients that do not have monoclonal gammopathy and have varying degrees of renal function. "MG.csv" will be used if you want to compare the sensitivity of the PC2 clonality index reference interval with the manufacturer's sFLC-ratio-based reference interval (specificity will be defined by the interval percentage specified [default 95%]). For additional details on non-MG and MG cohort definitions, please refer to Azimi et al. (reference). "cases.csv" is a file you can upload to calculate the PC clonality index for any given set of serum free light chain results. 
 
 ## Getting Started
+### Installation
+To run, clone the PC-clonality-score Github repository:
+
+```git clone https://github.com/Zaydman-Lab/PC-clonality-score.git```
 ### Environment and Dependencies
 1. [Download Conda] (https://conda.io/projects/conda/en/latest/user-guide/install/download.html) and follow [installation instructions] (https://conda.io/projects/conda/en/latest/user-guide/install/index.html#).
 2. Create the conda environment by running the .yml file:
@@ -21,27 +25,22 @@ This will create the Conda environment and install the following dependencies:
 - Pandas
 - SciPy
 
-### Installation
-To run, clone the PC-clonality-score Github repository:
-
-```git clone https://github.com/Zaydman-Lab/PC-clonality-score.git```
+3. Activate the Conda environment:
+```conda activate sflc```
+4. Run the code below.
 
 ## Usage
-PC-clonality-score can be used to accomplish 3 main use cases:
-1. Using local data to generate local PC2-based reference interval and equation for calculating PC2 metric.
-2. Evaluating performance (diagnostic sensitivity and specificity) of locally-derived OR WashU-derived PC2 metric and interval on local data.
-3. Calculating PC2 metric and assigning as normal/abnormal using locally-derived OR WashU-derived PC2 metric equation and interval.
-
-The steps for performing each of these use cases is described below.
-
 ### Use Case 1: Defining local PC2-based reference interval and equation
-To define a local PC2-based reference interval and equation, perform the following steps:
-1. Define a local "non-MG" cohort.
-2. Create a CSV file with X rows and 2 columns.
-- Each row should contain a unique sFLC sample from the non-MG cohort. 
-- The left and right columns should be named "kappa" and "lambda" and contain kappa and lambda sFLC values, respectively. 
-- Place the CSV file into the "Data" directory of the repository. 
-3. Run pc_clonality.py with the "-n" flag followed by the filename of CSV file created in Step 1. For example:
+#### Inputs
+- Optional: non_MG.csv
+#### Usage
+```python pc_clonality.py -n non_MG.csv```
+#### Outputs
+- vars.csv: contains the PC2 clonality index-based interval ('PCA_RI_low' and 'PCA_RI_high') as well as the variables needed to calculate the PC2 clonality index for new cases. The equation takes the form of:
+
+'''math
+\A*log((
+'''
 
 ```python pc_clonality.py -n "your_non_MG_cohort_filename.csv"```
 4. Inspect the output in the "Output" folder of the repository
