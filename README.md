@@ -30,7 +30,7 @@ This will create the Conda environment and install the following dependencies:
 4. Run the code below.
 
 ## Usage
-### Use Case 1: Defining local PC2-based reference interval and equation
+### Case 1: Defining local PC2-based reference interval and equation
 #### Inputs
 - Optional: non_MG.csv
 #### Usage
@@ -41,58 +41,34 @@ This will create the Conda environment and install the following dependencies:
 ```math
 A*\log(\frac{(kappa)-\overline{kappa})}{\sigma{kappa}}) + B*\log(\frac{(lambda)-\overline{lambda})}{\sigma{lambda}})
 ```
-### Use Case 2: Calculating PC clonality index for new cases
+### Case 2: Calculating PC clonality index for new cases
 #### Inputs
-- Optional: non_MG.csv
 - Required: cases.csv
+- Optional: non_MG.csv
 #### Usage
 ```python pc_clonality.py -n non_MG.csv -c cases.csv```
 #### Output
 - pc2_cases.csv will contain four columns containing the kappa values, lambda values, PC2 clonality index, and an abnormal flag (0 for normal, 1 for abnormal) for each case.
 
-### Use Case 3: Evaluating Sensitivity and Specificity
-The diagnostic performance of the PC2 metric and interval can be evaluated using either 1) a locally-defined PC2 metric equation and reference interval, or 2) the PC2 metric and interval derived using the WashU non-MG cohort. To evaluate diagnostic performance using either of these methods, perform the following steps:
-1. Define a local "MG" cohort.
-2. Create a CSV file with X rows and 2 columns.
-- Each row should contain a unique sFLC sample from the MG cohort. 
-- The left and right columns should be named "kappa" and "lambda" and contain kappa and lambda sFLC values, respectively. 
-- Place the CSV file into the "Data" directory of the repository. 
-3. To use evaluate diagnostic performance using a locally-defined PC2 metric and interval, run:
-
-```python pc_clonality.py -n "your_non_MG_cohort_filename.csv" -m "your_MG_cohort_filename.csv"```
-
-To use the WashU-derived PC2 metric and interval, simply run the above while omitting the -n flag:
-
-```python pc_clonality.py -m "your_MG_cohort_filename.csv"```
-
-4. Inspect the output in the "Output" folder of the repository:
-- "performance.csv" will contain the sensitivity and specificity for the manufacturer's sFLC-ratio-based interval ("sFLC_Sp" and "sFLC_Se") and PC2-based metric and interval ("PC_Sp", "PC_Se"). 
-
-### Use Case 3: Calculating the PC2 metric for new cases
-PC-clonality-index provides a function for calculating the PC2 metric for new cases based on their kappa and lambda sFLC results. Similar to use case #2, this use case can be performed using the PC2 metric and interval derived from either 1) a locally-defined PC2 metric equation and reference interval, or 2) the PC2 metric and interval derived using the WashU non-MG cohort. To calculate the PC2 metric for new cases using either of  these methods, perform the following steps:
-1. Create a CSV file with X rows and 2 columns.
-- Each row should contain a unique sFLC sample. 
-- The left and right columns should be named "kappa" and "lambda" and contain kappa and lambda sFLC values, respectively. 
-- Place the CSV file into the "Data" directory of the repository. 
-3. To calculate the PC2 metric using a locally-defined PC2 metric and interval, run:
-```python pc_clonality.py -n "your_non_MG_cohort_filename.csv" -c "your_cases_filename.csv"```
-
-To use the WashU-derived PC2 metric and interval, simply run the above while omitting the -n flag:
-
-```python pc_clonality.py -m "your_MG_cohort_filename.csv"```
-
-3. Inspect the output in the "Output" folder of the repository:
-- "cases_pc2.csv" will contain four columns containing the kappa values, lambda values, PC2 metric, and an abnormal flag (0 for normal, 1 for abnormal) for each case, respectively. 
-
-### Combining use cases
-Use cases 1, 2, and 3 can be combined into one step. For example, to define a local PC2-based interval, evaluate the diagnostic performance, and calculate the PC2 metric for new cases, run the following:
-
-```python pc_clonality.py -n "your_non_MG_cohort_filename.csv" -m "your_MG_cohort_filename.csv" -c "your_cases_filename.csv"```
+### Case 3: Evaluating Sensitivity and Specificity
+#### Inputs
+- Required: MG.csv
+- Optional: non_MG.csv
+#### Usage
+```python pc_clonality.py -n non_MG.csv -m MG.csv```
+#### Output
+- "performance.csv" will contain the sensitivity and specificity for the manufacturer's sFLC-ratio-based interval ("sFLC_Sp" and "sFLC_Se") and PC2 clonality index-based reference interval ("PC_Sp", "PC_Se"). 
 
 ### Defining custom interval bounds
 By default, PC-clonality-index will calculate the PC2-metric-based reference interval using a 95% (2.5-97.5%ile) diagnostic interval. These bounds can be customized by providing "-l" and "-u" flags. For example, to define the PC2 metric equation and a corresponding 90% reference interval, run the following:
-
 ```python pc_clonality.py -n "your_non_MG_cohort_filename.csv" -l 5 -u 95```
+
+### Combining use cases
+Use cases 1, 2, and 3 can be combined into a single step. For example, to define a local PC2-based interval, evaluate the diagnostic performance, and calculate the PC2 metric for new cases, run the following:
+
+```python pc_clonality.py -n "your_non_MG_cohort_filename.csv" -m "your_MG_cohort_filename.csv" -c "your_cases_filename.csv"```
+
+## References
 
 ## Contact
 For any questions, comments, or suggestions, please feel free to contact Mark Zaydman via this repository or [email](mailto:zaydmanm@wustl.edu) or Vahid Azimi via [email](mailto:a.vahid@wustl.edu).
