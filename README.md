@@ -38,16 +38,19 @@ This will create the Conda environment and install the following dependencies:
 #### Outputs
 - vars.csv: contains the PC2 clonality index-based interval ('PCA_RI_low' and 'PCA_RI_high') as well as the variables needed to calculate the PC2 clonality index for new cases. The equation takes the form of:
 
-'''math
-\A*log((
-'''
+```math
+A*\log(\frac{(kappa)-\overline{kappa})}{\sigma{kappa}}) + B*\log(\frac{(lambda)-\overline{lambda})}{\sigma{lambda}})
+```
+### Use Case 2: Calculating PC clonality index for new cases
+#### Inputs
+- Optional: non_MG.csv
+- Required: cases.csv
+#### Usage
+```python pc_clonality.py -n non_MG.csv -c cases.csv```
+#### Output
+- pc2_cases.csv will contain four columns containing the kappa values, lambda values, PC2 clonality index, and an abnormal flag (0 for normal, 1 for abnormal) for each case.
 
-```python pc_clonality.py -n "your_non_MG_cohort_filename.csv"```
-4. Inspect the output in the "Output" folder of the repository
-- "pc_vars.csv" will contain the PC2 interval bounds ('PCA_RI_low' and 'PCA_RI_high') as well as all of the variables needed to calculate the PC2 metric for new cases. 
-- The equation to calculate the PC2 metric for new cases takes the following form: A*((log(kappa)-kappa_mean)/kappa_std) + B((log(lambda)-lambda_mean)/lambda_std)
-
-### Use Case 2: Evaluating diagnostic performance (sensitivity and specificity) of PC2 metric and interval
+### Use Case 3: Evaluating Sensitivity and Specificity
 The diagnostic performance of the PC2 metric and interval can be evaluated using either 1) a locally-defined PC2 metric equation and reference interval, or 2) the PC2 metric and interval derived using the WashU non-MG cohort. To evaluate diagnostic performance using either of these methods, perform the following steps:
 1. Define a local "MG" cohort.
 2. Create a CSV file with X rows and 2 columns.
