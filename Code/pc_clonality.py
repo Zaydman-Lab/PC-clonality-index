@@ -71,12 +71,12 @@ def main():
     (options, args) = parser.parse_args()
 
     if options.nonmg_fn!=None:
-        nonmg_path = data_path+'/'+options.nonmg_fn
+        nonmg_path = data_path+'/non_MG.csv'
     else:
         nonmg_path = data_path+'/non_MG_wu.csv'
     
     if options.mg_fn!=None:
-        mg_path = data_path+'/'+options.mg_fn
+        mg_path = data_path+'/MG.csv'
     else:
         mg_path = None
 
@@ -95,7 +95,7 @@ def main():
         performance_dict.to_csv(output_path+'/performance.csv')
     
     if options.cases_fn!=None:
-        cases_path = data_path+'/'+options.cases_fn
+        cases_path = data_path+'/cases.csv'
         df_cases = embed_cases(cases_path,z_transform, pc_transform, PCA_RI)
         df_cases.to_csv(output_path+'/cases_pc2.csv',index=False)
 
