@@ -72,7 +72,7 @@ Use cases 1, 2, and 3 can be combined into a single step. For example, to define
 ```python pc_clonality.py -n non_MG.csv -m MG.csv -c cases.csv```
 
 ## References
-1. Azimi V, Zaydman MA. A novel metric improves the accuracy and robustness to renal function of serum free light chain assay interpretation. 
+1. Azimi V, Slade M, Fiala M, Fortier J, Stockeryl-Goldstein K, Frater JL, Brestoff JR, Jackups R, Zaydman MA. A novel metric improves the accuracy and robustness to renal function of serum free light chain assay interpretation. 
 2. Horowitz, GL. Defining, Establishing, and Verifying Reference Intervals in the Clinical Laboratory, 3rd Edition. Clinical and Laboratory Standards Institute, 2008.
 
 ## Contact
