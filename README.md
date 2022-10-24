@@ -3,7 +3,7 @@ Code repository for PC clonality index package to accompany manuscript by Azimi 
 
 ## Introduction
 
-<img width="391" alt="Screen Shot 2022-10-23 at 6 44 54 PM" src="https://user-images.githubusercontent.com/10732984/197424122-b1598335-fedf-4839-a532-2b67c9d53c03.png">
+<img width="834" alt="Screen Shot 2022-10-23 at 7 24 38 PM" src="https://user-images.githubusercontent.com/10732984/197425896-1d3419b5-35a4-4ec4-8994-5bde435c4463.png">
 
 This package can be used to perform three use cases: 1) Derive an equation for calculating the PC2 clonality index and a corresponding reference interval using serum free light chain assay results from a non-MG cohort, as described in Azimi et al. (reference), 2) Calculate the PC2 clonality index for a set of serum free light chain results, and 3) Calculate the sensitivity and specificity of the PC2 clonality index-based reference interval and the manufacturer's sFLC-ratio-based interval using non-MG and MG cohorts. 
 
