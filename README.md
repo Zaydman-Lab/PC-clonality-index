@@ -28,6 +28,7 @@ This will create the Conda environment and install the following dependencies:
 - SciPy
 
 3. Activate the Conda environment:
+
 ```conda activate sflc```
 4. Run the code below.
 
@@ -43,6 +44,19 @@ This will create the Conda environment and install the following dependencies:
 ```math
 A*\log(\frac{(kappa)-\overline{kappa})}{\sigma{kappa}}) + B*\log(\frac{(lambda)-\overline{lambda})}{\sigma{lambda}})
 ```
+A:
+
+B:
+
+$\overline{kappa}$: mean of kappa values in non-MG cohort
+
+$\overline{lambda}$: mean of lambda values in non-MG cohort
+
+$\sigma{kappa}$: standard deviation of kappa values in non-MG cohort
+
+$\sigma{lambda}$: mean of lambda values in non-MG cohort
+
+
 ### Case 2: Calculating PC clonality index for new cases
 #### Inputs
 - Required: cases.csv
