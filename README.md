@@ -30,7 +30,8 @@ This will create the Conda environment and install the following dependencies:
 3. Activate the Conda environment:
 
 ```conda activate sflc```
-4. Run the code below.
+
+4. Run the code (as described below).
 
 ## Usage
 ### Case 1: Defining local PC2-based reference interval and equation
@@ -44,18 +45,21 @@ This will create the Conda environment and install the following dependencies:
 ```math
 A*\log(\frac{(kappa)-\overline{kappa})}{\sigma{kappa}}) + B*\log(\frac{(lambda)-\overline{lambda})}{\sigma{lambda}})
 ```
-A:
+Description of variables (WashU-specific values)
 
-B:
+A: (6.88)
 
-$\overline{kappa}$: mean of kappa values in non-MG cohort
+B: (3.93)
 
-$\overline{lambda}$: mean of lambda values in non-MG cohort
+$\overline{kappa}$: mean of kappa values in non-MG cohort (1.31)
 
-$\sigma{kappa}$: standard deviation of kappa values in non-MG cohort
+$\overline{lambda}$: mean of lambda values in non-MG cohort (0.88)
 
-$\sigma{lambda}$: mean of lambda values in non-MG cohort
+$\sigma{kappa}$: standard deviation of kappa values in non-MG cohort (0.87)
 
+$\sigma{lambda}$: mean of lambda values in non-MG cohort (0.68)
+
+The WashU-specific PCA_RI_low and PCA_RI_high are -0.542 and 0.584, respectively.
 
 ### Case 2: Calculating PC clonality index for new cases
 #### Inputs
