@@ -24,6 +24,7 @@ import embed
 import matplotlib.pyplot as plt
 import pickle
 from typing import Tuple
+import visualize
 
 
 
@@ -45,7 +46,7 @@ def case_1(nonmg: pd.DataFrame,lb: float,ub: float)->Tuple[pd.DataFrame]:
 		'D': Vh_raw[0,1], #Second right singular vector in raw space                      
 		'D': np.mean(log_transform(X_normal)[:,1]), #Mean of log transformed lambda values for non_mg cohort
 		'F': np.std(log_transform(X_normal)[:,1])} #Standard deviation of log transformed lambda values for non_mg cohort
-	generate.plot_nonmg(X_nonmg, pc2_RI, z_transform, pc_transform)
+	visualize.plot_case1(X_nonmg, pc2_RI, z_transform, pc_transform)
 	return(pc2_RI, equation_dict, X_nonmg, z_transform, pc_transform)
 
 #%%
