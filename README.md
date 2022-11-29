@@ -38,7 +38,7 @@ This will create the Conda environment and install the following dependencies:
 #### Inputs
 - Optional: non_mg.csv
 #### Usage
-```python pc_clonality.py -n "path_to_non_mg.csv"""```
+```python pc_clonality.py -n path_to_non_mg.csv```
 #### Outputs
 - vars.csv: contains the PC2 clonality index-based interval ('PCA_RI_low' and 'PCA_RI_high') as well as the variables needed to calculate the PC2 clonality index for new cases. The equation takes the form of:
 
@@ -66,7 +66,7 @@ The WashU-specific PCA_RI_low and PCA_RI_high are -0.542 and 0.584, respectively
 - Required: cases.csv
 - Optional: non_MG.csv
 #### Usage
-```python pc_clonality.py -n "path_to_non_mg.csv" -c "path_to_cases.csv"```
+```python pc_clonality.py -n path_to_non_mg.csv -c path_to_cases.csv```
 #### Output
 - pc2_cases.csv will contain four columns containing the kappa values, lambda values, PC2 clonality index, and an abnormal flag (0 for normal, 1 for abnormal) for each case.
 
@@ -75,19 +75,19 @@ The WashU-specific PCA_RI_low and PCA_RI_high are -0.542 and 0.584, respectively
 - Required: mg.csv
 - Optional: non_mg.csv
 #### Usage
-```python pc_clonality.py -n "path_to_non_mg.csv" -m "path_to_mg.csv"```
+```python pc_clonality.py -n path_to_non_mg.csv -m path_to_mg.csv```
 #### Output
 - "performance.csv" will contain the sensitivity and specificity for the manufacturer's sFLC-ratio-based interval ("sFLC_Sp" and "sFLC_Se") and PC2 clonality index-based reference interval ("PC_Sp", "PC_Se"). 
 
 ### Defining custom interval bounds
 By default, PC-clonality-index will calculate the PC2-metric-based reference interval using a 95% (2.5-97.5%ile) diagnostic interval. These bounds can be customized by providing "-l" and "-u" flags. For example, to define the PC2 metric equation and a corresponding 90% reference interval, run the following:
 
-```python pc_clonality.py -n "path_to_non_mg.csv" -l 5 -u 95```
+```python pc_clonality.py -n path_to_non_mg.csv -l 5 -u 95```
 
 ### Combining use cases
 Use cases 1, 2, and 3 can be combined into a single step. For example, to define a local PC2-based interval, evaluate the diagnostic performance, and calculate the PC2 metric for new cases, run the following:
 
-```python pc_clonality.py -n "path_to_non_mg.csv" -m "path_to_mg.csv" -c "path_to_cases.csv"```
+```python pc_clonality.py -n path_to_non_mg.csv -m path_to_mg.csv -c path_to_cases.csv```
 
 ## References
 1. Azimi V, Slade M, Fiala M, Fortier J, Stockeryl-Goldstein K, Frater JL, Brestoff JR, Jackups R, Zaydman MA. A novel metric improves the accuracy and robustness to renal function of serum free light chain assay interpretation. 
