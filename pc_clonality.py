@@ -30,9 +30,15 @@ import visualize
 
 #%%
 
+def df2array(df: pd.DataFrame)->np.array:
+	"""Returns np array of kappa and labmda values derived from input dataframe"""
+	X = np.column_stack((df['kappa'].to_numpy(), df['lambda'].to_numpy())) 
+	return(X)
+
+
 def case_1(nonmg: pd.DataFrame,lb: float,ub: float)->Tuple[pd.DataFrame]:
 	"""Returns PC2-based reference interval, dictionary of PC2 equation parameters, and functions for Z and pc transforms of non-MG cohort"""
-	X_nonmg = np.column_stack((df['kappa'].to_numpy(), df['lambda'].to_numpy())) #convert to np array
+	X_nonmg = df2array(nonmg)
 	L_nonmg = transforms.log_transform(X_nonmg) #apply log transform to X_nonmg
 	Z_transform = transforms.make_ztransform(L_nonmg) #compute z transform of L_nonmg
 	Z_nonmg = Z_tranform(log_nonmg) #apply z transform to L_nonmg
@@ -51,12 +57,12 @@ def case_1(nonmg: pd.DataFrame,lb: float,ub: float)->Tuple[pd.DataFrame]:
 
 #%%
 def case_2(non_mg: pd.DataFrame, mg: pd.DataFrame)->dict:
-    '''Returns dictionary of performance metrics for manufacturers sFLC-ratio-based and PC2-based reference intervals'''
-
+	'''Returns dictionary of performance metrics for manufacturers sFLC-ratio-based and PC2-based reference intervals'''
+	X_mg=df2array(non_mg)
     lb=0.26
     ub=1.65
-    df_abnormal=generate.load_func(mg_path)
-    X_abnormal=generate.create_nparray(df_abnormal)
+
+X_abnormal=generate.create_nparray(df_abnormal)
     if X_normal.shape[1]==2 and X_abnormal.shape[1]==2:
         performance_dict = evaluate.SeSp_sFLCR(X_normal,lb,ub,X_abnormal)
         PC_performance_dict = evaluate.SeSp_PCA(X_normal,RI,pc_transform,z_transform,X_abnormal)
