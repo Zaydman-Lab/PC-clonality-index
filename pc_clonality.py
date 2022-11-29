@@ -55,9 +55,8 @@ def case_1(nonmg: pd.DataFrame,lb: float,ub: float)->Tuple[pd.DataFrame]:
 	visualize.plot_case1(X_nonmg, pc2_RI, z_transform, pc_transform)
 	return(X_nonmg,pc2_RI, equation_parameters, z_transform, pc_transform)
 
-#%%
 def case_2(non_mg: pd.DataFrame, mg: pd.DataFrame, lb: float, ub: float)->dict:
-	'''Returns dictionary of performance metrics for manufacturers sFLC-ratio-based and PC2-based reference intervals'''
+	"""Returns dictionary of performance metrics for manufacturers sFLC-ratio-based and PC2-based reference intervals"""
 	X_mg=df2array(non_mg)
 	X_nonmg, pc2_RI, equation_parameters, z_transform, pc_transform = case_1(non_mg,lb,ub)
         performance = {}
@@ -66,12 +65,15 @@ def case_2(non_mg: pd.DataFrame, mg: pd.DataFrame, lb: float, ub: float)->dict:
         return(performance)
 
 #%%
-def embed_cases(cases_path,z_transform, pc_transform, PCA_RI):
-    ## optional. Requires a different .csv file as input. Will output a new file with
-    ## PC2 scores and a plot of where cases fall with respect to Katzmann and PC2 ref.
-    ## ranges
-    df_cases=embed.generate_embedding(cases_path,z_transform, pc_transform, PCA_RI)
-    return(df_cases)
+def case3(nonmg: pd.DataFrame,cases: pd.DataFrame)->pd.DataFrame:
+	"""Returns PC2 embeddings and normality flags for input cases based on nonmg data model"""
+	X_nonmg, pc2_RI, equation_parameters, z_transform, pc_transform = case_1(non_mg,lb,ub)	
+	X_cases = df2array(cases)
+	L_cases = transforms.log_transform(X_cases) #apply log transform to X_cases
+	Z_cases = Z_tranform(L_cases) #apply z transform to L_cases
+	cases['pc2'] = pc_transform(Z_cases)[:,1] #pc2 projections for nonmg cohort
+	cases['abnormal?'] = ((df['pc2'] > pc2_RI[0]) & (df['pc2'] < pc2_RI[1]))		   
+    	return(cases)
 
 #%%
 def main():
