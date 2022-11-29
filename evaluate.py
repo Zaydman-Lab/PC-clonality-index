@@ -4,9 +4,6 @@ import generate
 def calc_ratio(X):
     return(X[:,0]/X[:,1])
 
-def calc_pc(X):
-    pass
-
 def SeSp_sFLCR(X_normal,lb,ub, X_abnormal=None):
     Sp=sum(np.logical_and(calc_ratio(X_normal)>lb,calc_ratio(X_normal)<ub)/len(calc_ratio(X_normal)))
     Se=None
