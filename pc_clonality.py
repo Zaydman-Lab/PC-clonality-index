@@ -77,15 +77,15 @@ def main():
         nonmg_path = './Data/WashU.p'
     
     if options.mg_fn!=None:
-        mg_path = data_path+'/MG.csv'
+        mg_path = options.mg_fn
     else:
         mg_path = None
 
     lb=2.5
     ub=97.5
     if options.user_lb!=None and options.user_ub!=None:
-        lb=int(options.user_lb)
-        ub=int(options.user_ub)
+        lb=float(options.user_lb)
+        ub=float(options.user_ub)
 
     PCA_RI, pc_dict, X_normal, z_transform, pc_transform = generate_embedding(nonmg_path,lb,ub,output_path)
     pc_dict.update({'PCA_RI_low':PCA_RI[0], 'PCA_RI_high':PCA_RI[1]})
@@ -96,7 +96,7 @@ def main():
         performance_dict.to_csv(output_path+'/performance.csv')
     
     if options.cases_fn!=None:
-        cases_path = data_path+'/cases.csv'
+        cases_path = options.cases_fn
         df_cases = embed_cases(cases_path,z_transform, pc_transform, PCA_RI)
         df_cases.to_csv(output_path+'/cases_pc2.csv',index=False)
 
