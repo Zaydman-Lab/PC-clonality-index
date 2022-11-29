@@ -69,43 +69,47 @@ def embed_cases(cases_path,z_transform, pc_transform, PCA_RI):
 
 #%%
 def main():
-    data_path=os.getcwd()+'/Data'
-    output_path=os.getcwd()+'/Output'
-    parser = OptionParser()
 
+    parser = OptionParser()
     parser.add_option("-n", "--nonmg",
-                    dest = "nonmg_fn",
-                    help = "non-MG cohort csv filename")
+                    dest = "nonmg_fpath",
+                    help = "[optional] path to non-MG cohort csv file, default='.Data/WashU.p'")
     parser.add_option("-m", "--mg",
-                    dest = "mg_fn",
-                    help = "MG cohort csv filename")   
+                    dest = "mg_fpath",
+                    help = "[optional] path to MG cohort csv file, default=None")   
     parser.add_option("-c", "--cases",
-                    dest = "cases_fn",
-                    help = "cases for embedding csv filename")  
+                    dest = "cases_fpath",
+                    help = "[optional] path to csv file for cases, default=None")  
     parser.add_option("-l", "--lower",
                     dest = "user_lb",
-                    help = "user-defined lower bound")  
+                    help = "[optional] % lower bound for reference interval, default=2.5")  
     parser.add_option("-u", "--upper",
                     dest = "user_ub",
-                    help = "user-defined upper bound")    
-
+                    help = "[optional] % upper bound for reference interval, default=97.5")    
     (options, args) = parser.parse_args()
 
-    if options.nonmg_fn!=None:
-        nonmg_path = options.nonmg_fn
+    if options.nonmg_fpath:
+        nonmg = pd.read_csv(options.nonmg_fpath)
     else:
-        nonmg_path = './Data/WashU.p'
+        with open('./Data/WashU.p', 'rb') as file:
+            nonmg=pickle.load(file)
     
-    if options.mg_fn!=None:
-        mg_path = options.mg_fn
+    if options.mg_fpath:
+        mg = pd.read_csv(options.mg_fpath)
     else:
-        mg_path = None
+        mg = None
+        
+    if options.cases_fpath:
+        cases = pd.read_csv(options.cases_fpath)
+    else:
+        cases = None
 
-    lb=2.5
-    ub=97.5
-    if options.user_lb!=None and options.user_ub!=None:
+    if options.user_lb and options.user_ub:
         lb=float(options.user_lb)
         ub=float(options.user_ub)
+    else:
+        lb=2.5
+        ub=97.5      
 
     PCA_RI, pc_dict, X_normal, z_transform, pc_transform = generate_embedding(nonmg_path,lb,ub,output_path)
     pc_dict.update({'PCA_RI_low':PCA_RI[0], 'PCA_RI_high':PCA_RI[1]})
