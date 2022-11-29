@@ -66,7 +66,7 @@ The WashU-specific PCA_RI_low and PCA_RI_high are -0.542 and 0.584, respectively
 - Required: cases.csv
 - Optional: non_MG.csv
 #### Usage
-```python pc_clonality.py -n "path_to_non_mg.csv" -c path_to_cases.csv```
+```python pc_clonality.py -n path_to_non_mg.csv -c path_to_cases.csv```
 #### Output
 - pc2_cases.csv will contain four columns containing the kappa values, lambda values, PC2 clonality index, and an abnormal flag (0 for normal, 1 for abnormal) for each case.
 
