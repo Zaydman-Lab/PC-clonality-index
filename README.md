@@ -1,4 +1,4 @@
-# PC-clonality-score
+# PC-clonality-index
 Code repository for PC clonality index package to accompany manuscript by Azimi et al.
 
 ## Introduction
