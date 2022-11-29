@@ -38,7 +38,7 @@ This will create the Conda environment and install the following dependencies:
 #### Inputs
 - Optional: non_mg.csv
 #### Usage
-```python pc_clonality.py -n "path_to_non_mg.csv"""```
+```python pc_clonality.py -n path_to_non_mg.csv```
 #### Outputs
 - vars.csv: contains the PC2 clonality index-based interval ('PCA_RI_low' and 'PCA_RI_high') as well as the variables needed to calculate the PC2 clonality index for new cases. The equation takes the form of:
 
