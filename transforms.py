@@ -1,3 +1,15 @@
+"""
+transforms.py
+
+Created by Vahid Azimi
+
+Purpose: Helper functions for generating transforms used in PC clonality index
+
+
+"""
+
+
+
 import pickle
 import numpy as np
 import seaborn as sns
