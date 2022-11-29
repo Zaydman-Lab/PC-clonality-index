@@ -47,15 +47,7 @@ def find_RI(X,lb,ub):
         np.percentile(X,ub)]
     return(RI)
 
-# #%% load pickle file containing kappa and lambda values of non-MG cohort
-def load_func(path):
 
-    if 'WashU' in path:
-        df=pickle.load(open(path,'rb'))
-        return(df)
-    else:
-        df = pd.read_csv(path)
-        return(df)
 
 #%% convert dataframes into numpy array
 def create_nparray(df):
