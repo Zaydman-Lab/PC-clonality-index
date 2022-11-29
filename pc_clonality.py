@@ -53,21 +53,17 @@ def case_1(nonmg: pd.DataFrame,lb: float,ub: float)->Tuple[pd.DataFrame]:
 		'D': np.mean(log_transform(X_normal)[:,1]), #Mean of log transformed lambda values for non_mg cohort
 		'F': np.std(log_transform(X_normal)[:,1])} #Standard deviation of log transformed lambda values for non_mg cohort
 	visualize.plot_case1(X_nonmg, pc2_RI, z_transform, pc_transform)
-	return(pc2_RI, equation_parameters, z_transform, pc_transform)
+	return(X_nonmg,pc2_RI, equation_parameters, z_transform, pc_transform)
 
 #%%
-def case_2(non_mg: pd.DataFrame, mg: pd.DataFrame)->dict:
+def case_2(non_mg: pd.DataFrame, mg: pd.DataFrame, lb: float, ub: float)->dict:
 	'''Returns dictionary of performance metrics for manufacturers sFLC-ratio-based and PC2-based reference intervals'''
 	X_mg=df2array(non_mg)
-    lb=0.26
-    ub=1.65
-
-X_abnormal=generate.create_nparray(df_abnormal)
-    if X_normal.shape[1]==2 and X_abnormal.shape[1]==2:
-        performance_dict = evaluate.SeSp_sFLCR(X_normal,lb,ub,X_abnormal)
-        PC_performance_dict = evaluate.SeSp_PCA(X_normal,RI,pc_transform,z_transform,X_abnormal)
-        performance_dict.update(PC_performance_dict)
-        return(performance_dict)
+	X_nonmg, pc2_RI, equation_parameters, z_transform, pc_transform = case_1(non_mg,lb,ub)
+        performance = {}
+	performance.update(evaluate.SeSp_sFLCR(X_nonmg,X_mg,0.26,1.65) #evaluate performance of manufacturer's sFLC-ratio-based interval
+        performance.update(evaluate.SeSp_PCA(X_nonmg, X_mg, pc2_RI, pc_transform, z_transform) #evaluate performance of pc2-based interval
+        return(performance)
 
 #%%
 def embed_cases(cases_path,z_transform, pc_transform, PCA_RI):
