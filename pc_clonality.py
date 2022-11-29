@@ -24,6 +24,11 @@ import embed
 import matplotlib.pyplot as plt
 import pickle
 
+#%% 
+def load_data(nonmg_file: str ='./Data/WashU.p', mg_file: str = '', cases_file: str = '')->Tuple[pd.DataFrame]:
+    '''Returns non_MG, MG, and cases cohorts as suggested by user input'''
+    nonmg=pd.read_csv(nonmg_file)
+    
 #%%
 def generate_embedding(nonmg_path,lb,ub,output_path):
     '''input: nonmg_path, lb, ub
