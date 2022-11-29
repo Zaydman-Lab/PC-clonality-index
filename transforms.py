@@ -20,9 +20,9 @@ def log_transform(INPUT: np.array, inverse: bool = False) -> np.array:
 	"""Returns log transformed or inverse log transformed version of input np array"""
 	OUTPUT=np.copy(INPUT)
 	if inverse:
-	OUTPUT=np.exp(INPUT)
+		OUTPUT=np.exp(INPUT)
 	else:
-	OUTPUT=np.log(INPUT)
+		OUTPUT=np.log(INPUT)
 	return(OUTPUT)
 
 def make_ztransform(X: np.array)->Callable[[np.array,bool],np.array]:
