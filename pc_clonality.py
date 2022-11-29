@@ -32,21 +32,21 @@ from typing import Tuple
 def case_1(nonmg: pd.DataFrame,lb: float,ub: float)->Tuple[pd.DataFrame]:
     """Returns embeddings of non"""
 	X_nonmg = np.column_stack((df['kappa'].to_numpy(), df['lambda'].to_numpy())) #convert to np array
-    L_nonmg = transforms.log_transform(X_nonmg) #apply log transform to X_nonmg
-    Z_transform = transforms.make_ztransform(L_nonmg) #compute z transform of L_nonmg
-    Z_nonmg = Z_tranform(log_nonmg) #apply z transform to L_nonmg
-    pc_transform, U, S, Vh = transforms.make_pctransform(Z_nonmg,return_decomposition=True) #compute z transform of Z_nonmg
-    pc2 = pc_transform(Z_nonmg)[:,1] #pc2 projections for nonmg cohort
-    pc2_RI = [np.percentile(pc2,lb),np.percentile(pc2,ub) #computer reference interval for pc2
-    Vh_raw=log_transform(z_transform(Vh,inverse=True),inverse=True) #project right singular vectors from z space into raw sFLC space
-    equation_dict = {'A': Vh_raw[0,0], #First right singular vector in raw space
-                     'B': np.mean(log_transform(X_normal)[:,0]), #Mean of log transformed kappa values for non_mg cohort
-                     'C': np.std(log_transform(X_normal)[:,0]), #Standard deviation of log transformed kappa values for non_mg cohort
-                     'D': Vh_raw[0,1], #Second right singular vector in raw space                      
-                     'D': np.mean(log_transform(X_normal)[:,1]), #Mean of log transformed lambda values for non_mg cohort
-                     'F': np.std(log_transform(X_normal)[:,1])} #Standard deviation of log transformed lambda values for non_mg cohort
-    generate.plot_nonmg(X_nonmg, pc2_RI, z_transform, pc_transform)
-    return(pc2_RI, equation_dict, X_nonmg, z_transform, pc_transform)
+	L_nonmg = transforms.log_transform(X_nonmg) #apply log transform to X_nonmg
+	Z_transform = transforms.make_ztransform(L_nonmg) #compute z transform of L_nonmg
+	Z_nonmg = Z_tranform(log_nonmg) #apply z transform to L_nonmg
+	pc_transform, U, S, Vh = transforms.make_pctransform(Z_nonmg,return_decomposition=True) #compute z transform of Z_nonmg
+	pc2 = pc_transform(Z_nonmg)[:,1] #pc2 projections for nonmg cohort
+	pc2_RI = [np.percentile(pc2,lb),np.percentile(pc2,ub) #computer reference interval for pc2
+	Vh_raw=log_transform(z_transform(Vh,inverse=True),inverse=True) #project right singular vectors from z space into raw sFLC space
+	equation_dict = {'A': Vh_raw[0,0], #First right singular vector in raw space
+		'B': np.mean(log_transform(X_normal)[:,0]), #Mean of log transformed kappa values for non_mg cohort
+		'C': np.std(log_transform(X_normal)[:,0]), #Standard deviation of log transformed kappa values for non_mg cohort
+		'D': Vh_raw[0,1], #Second right singular vector in raw space                      
+		'D': np.mean(log_transform(X_normal)[:,1]), #Mean of log transformed lambda values for non_mg cohort
+		'F': np.std(log_transform(X_normal)[:,1])} #Standard deviation of log transformed lambda values for non_mg cohort
+	generate.plot_nonmg(X_nonmg, pc2_RI, z_transform, pc_transform)
+	return(pc2_RI, equation_dict, X_nonmg, z_transform, pc_transform)
 
 #%%
 def evaluate_ri(X_normal, RI, pc_transform, z_transform, mg_path=None):
