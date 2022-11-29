@@ -1,3 +1,18 @@
+"""
+pc_clonality.py
+Created by Vahid Azimi
+11/29/22
+
+Purpose: main point of entry into PC-clonality-index package
+
+This script will execute one of the three cases described in the .README based on the user input
+
+Functions:
+
+
+generate_embedding(nonmg_path,lb,ub,output_path):
+    '''Returns tranfform object and embeddings'''
+"""
 
 #%%
 from optparse import OptionParser
