@@ -7,7 +7,8 @@ This package can be used to perform three use cases: 1) Derive an equation for c
 
 The behavior of the program will be determined by the files and input flags you give it. We have provided a template file called "WashU.p"; you will use this file if you want to use your own local reference cohort for your own institutional data. The default behavior if "non_mg.csv" is not provided is to use the WashU data that is described in Azimi et al. (1). The non-MG cohort will ideally consist of an sFLC result from at least 120 patients (2) that do not have monoclonal gammopathy and have varying degrees of renal function. "MG.csv" will be used if you want to compare the sensitivity of the PC2 clonality index reference interval with the manufacturer's sFLC-ratio-based reference interval (specificity will be defined by the interval percentage specified [default 95%]). For additional details on non-MG and MG cohort definitions, please refer to Azimi et al. (reference). "cases.csv" is a file you can upload to calculate the PC clonality index for any given set of serum free light chain results. 
 
-<img width="834" alt="Screen Shot 2022-10-23 at 7 24 38 PM" src="https://user-images.githubusercontent.com/10732984/197425896-1d3419b5-35a4-4ec4-8994-5bde435c4463.png">
+<img width="867" alt="Screen Shot 2022-11-30 at 4 40 29 PM" src="https://user-images.githubusercontent.com/10732984/204924499-e5ffab22-ebb5-4664-aa74-0aefa95b1484.png">
+
 
 ## Getting Started
 ### Installation
