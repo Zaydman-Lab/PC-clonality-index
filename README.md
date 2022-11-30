@@ -47,13 +47,13 @@ A*(\frac{log(kappa)-{B}}{C}) + D*(\frac{log(lambda)-{E}}{F})
 ```
 Description of variables (WashU-specific values)
 
-A: (6.88)
+A: (0.71)
 
 B: mean of log(kappa) values in non-MG cohort (1.31)
 
 C: standard deviation of log(kappa) values in non-MG cohort (0.87)
 
-D: (3.93)
+D: (-0.71)
 
 E: mean of log(lambda) values in non-MG cohort (0.88)
 
