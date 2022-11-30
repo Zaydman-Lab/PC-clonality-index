@@ -58,14 +58,14 @@ def derive_interval(nonmg: pd.DataFrame,lb: float,ub: float)->Tuple[np.array,lis
 			f.write(f"\t%s = %.2f\n" % (key,equation_parameters[key]))
 		f.write('\n\nPC clonality index reference interval\n')
 		f.write('--------------------------------------\n')
-		f.write(f"%s %%ile = %.2f\n" % (lb,pc2_RI[0]))
-		f.write(f"%s %%ile = %.2f" % (ub,pc2_RI[1]))		
+		f.write(f"\t%s %%ile = %.2f\n" % (lb,pc2_RI[0]))
+		f.write(f"\t%s %%ile = %.2f" % (ub,pc2_RI[1]))		
 	return(X_nonmg,pc2_RI, equation_parameters, z_transform, pc_transform)
 
 #%%
 def evaluate_interval(nonmg: pd.DataFrame, mg: pd.DataFrame, lb: float, ub: float):
 	"""Evaluate PC2-based interval for MG diagnosis"""
-	X_mg=df2array(nonmg)
+	X_mg=df2array(mg)
 	X_nonmg, pc2_RI, _, z_transform, pc_transform = derive_interval(nonmg,lb,ub)
 	performance = {}
 	performance.update(evaluate.SeSp_sFLCR(X_nonmg,X_mg,0.26,1.65)) #evaluate performance of manufacturer's sFLC-ratio-based interval
