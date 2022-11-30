@@ -17,7 +17,9 @@ from typing import Callable
 import pandas as pd 
 
 def plot_sflc(X_nonmg: np.array, pc2_RI: list[float,float], z_transform: Callable[[np.array,bool],np.array], pc_transform: Callable[[np.array,bool],np.array], X_mg: np.array = [], X_cases: np.array = [], parameters: dict = False, performance: pd.DataFrame = pd.DataFrame())->None:
-  """Saves .png image of plot of non-MG cohort with manufacturer's sFLC-ratio-based and PC2-based reference intervals superimposed"""
+  """Saves .png image of plot of non-MG cohort with manufacturer's sFLC-ratio-based and PC2-based reference intervals superimposed
+  If case_2 is invoked, saves a .png image of plot of MG cohort and non-MG cohort with reference intervals superimposed
+  If case_3 is invoked, saves a .png image of cases with reference intervals superimposed"""
 
   # plot non-mg cohort as scatter plot
   fig,ax=plt.subplots()
