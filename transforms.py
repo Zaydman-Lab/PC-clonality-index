@@ -1,20 +1,27 @@
 """
 transforms.py
 
-Created by Vahid Azimi
+Created by Vahid Azimi and Mark Zaydman
 
-Purpose: Helper functions for generating transforms used in PC clonality index
+Purpose: Functions for generating transforms used in PC clonality index
 
+This script contains functions and factory functions to generated 
+log, z, and pc transforms using a non-mg cohort data model.
+
+Functions:
+	log_transform(INPUT: np.array, inverse: bool = False) -> np.array:
+		'''Returns log transformed or inverse log transformed version of input np array'''
+	make_ztransform(X: np.array)->Callable[[np.array,bool],np.array]:
+		'''Returns z transform function for data model X'''
+	make_pctransform(X: np.array, return_decomposition=False)->Callable[[np.array,bool],np.array]:
+		'''Returns PC transform function for data model X'''
 
 """
 
-#%% imports
 import numpy as np
-import pandas as pd
 import scipy.linalg
 from typing import Callable
 
-#%% transform functions
 def log_transform(INPUT: np.array, inverse: bool = False) -> np.array:
 	"""Returns log transformed or inverse log transformed version of input np array"""
 	OUTPUT=np.copy(INPUT)
