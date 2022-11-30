@@ -63,7 +63,7 @@ def derive_interval(nonmg: pd.DataFrame,lb: float,ub: float)->Tuple[np.array,lis
 	return(X_nonmg,pc2_RI, equation_parameters, z_transform, pc_transform)
 
 #%%
-def evaluate_interval(nonmg: pd.DataFrame, mg: pd.DataFrame, lb: float, ub: float)->dict:
+def evaluate_interval(nonmg: pd.DataFrame, mg: pd.DataFrame, lb: float, ub: float):
 	"""Evaluate PC2-based interval for MG diagnosis"""
 	X_mg=df2array(nonmg)
 	X_nonmg, pc2_RI, _, z_transform, pc_transform = derive_interval(nonmg,lb,ub)
@@ -74,7 +74,7 @@ def evaluate_interval(nonmg: pd.DataFrame, mg: pd.DataFrame, lb: float, ub: floa
 	visualize.evaluation(X_nonmg,X_mg, pc2_RI, z_transform, pc_transform)
 
 #%%
-def apply_interval(nonmg: pd.DataFrame,cases: pd.DataFrame, lb: float, ub: float)->pd.DataFrame:
+def apply_interval(nonmg: pd.DataFrame,cases: pd.DataFrame, lb: float, ub: float):
 	"""Apply PC2-based interval to new patient data"""
 	_, pc2_RI, _, z_transform, pc_transform = derive_interval(nonmg,lb,ub)
 	X_cases = df2array(cases)
