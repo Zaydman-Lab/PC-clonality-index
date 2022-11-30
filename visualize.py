@@ -56,7 +56,7 @@ def plot_sflc(X_nonmg: np.array, pc2_RI: list[float,float], z_transform: Callabl
   line_pc2 = Line2D([0,1],[0,1],linestyle='--', color='black')
   ax.legend([line_katz, line_pc2],['Katzmann: RI = 0.26≤sFLC-ratio≤1.65', 'PCCI: RI = %.2f≤PCCI≤%.2f' %(pc2_RI[0],pc2_RI[1])])
   if parameters:
-    plt.title(r'PCCI=$%.2f*(\frac{log(kappa)-{%.2f}}{%.2f}) + %.2f*(\frac{log(lambda)-{%.2f}}{%.2f})$' %(parameters['A'],parameters['B'], parameters['C'], parameters['D'], parameters['E'], parameters['F']))
+    ax.set_title(r'PCCI=$%.2f*(\frac{log(kappa)-{%.2f}}{%.2f}) + %.2f*(\frac{log(lambda)-{%.2f}}{%.2f})$' %(parameters['A'],parameters['B'], parameters['C'], parameters['D'], parameters['E'], parameters['F']))
   if len(performance)>0:
     ax.legend([line_katz, line_pc2],['Katzmann: RI = 0.26≤sFLC-ratio≤1.65\n    Sensitivity=%s, Specificity=%s' %(performance.loc["Manufacturer's sFLC-ratio interval",'Sensitivity'], performance.loc["Manufacturer's sFLC-ratio interval",'Specificity']), 'PCCI: RI = %.2f≤PCCI≤%.2f\n    Sensitivity=%s, Specificity=%s' %(pc2_RI[0], pc2_RI[1], performance.loc['PC clonality index interval','Sensitivity'], performance.loc['PC clonality index interval','Specificity'])])
   plt.tight_layout()
@@ -73,4 +73,3 @@ def plot_sflc(X_nonmg: np.array, pc2_RI: list[float,float], z_transform: Callabl
     plt.savefig('./Output/case_3.png')
   
 
-  

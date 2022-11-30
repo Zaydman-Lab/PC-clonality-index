@@ -36,6 +36,8 @@ import visualize
 import transforms
 import evaluate
 import numpy as np
+import seaborn as sns
+from matplotlib import pyplot as plt
 
 def parse_args()->Tuple[str]:
 	"""Returns parsed arguments"""
@@ -84,11 +86,11 @@ def derive_interval(nonmg: pd.DataFrame,lb: float,ub: float)->Tuple[np.array,lis
 	pc2_RI = [np.percentile(pc2,lb),np.percentile(pc2,ub)] #compute reference interval for pc2
 	Vh_raw=transforms.log_transform(z_transform(Vh,inverse=True),inverse=True) #project right singular vectors from z space into raw sFLC space
 	equation_parameters = {
-		'A': Vh_raw[0,0], #First right singular vector in raw space
+		'A': Vh.T[0,1], #First right singular vector in raw space
 		'B': np.mean(transforms.log_transform(X_nonmg)[:,0]), #Mean of log transformed kappa values for non_mg cohort
 		'C': np.std(transforms.log_transform(X_nonmg)[:,0]), #Standard deviation of log transformed kappa values for non_mg cohort
-		'D': Vh_raw[0,1], #Second right singular vector in raw space                      
-		'E': np.mean(transforms.log_transform(X_nonmg)[:,1]), #Mean of log transformed lambda values for non_mg cohort
+		'D': Vh.T[1,1], #Second right singular vector in raw space                      
+		'E': np.mean(transforms.log_transform(X_nonmg)[:,1]), #Mean of log transformed lambda values for non_mg cohort 
 		'F': np.std(transforms.log_transform(X_nonmg)[:,1]) #Standard deviation of log transformed lambda values for non_mg cohort
 	} 
 	visualize.plot_sflc(X_nonmg, pc2_RI, z_transform, pc_transform, parameters=equation_parameters)
@@ -102,7 +104,7 @@ def derive_interval(nonmg: pd.DataFrame,lb: float,ub: float)->Tuple[np.array,lis
 		f.write(f"\t%s %%ile = %.2f\n" % (lb,pc2_RI[0]))
 		f.write(f"\t%s %%ile = %.2f" % (ub,pc2_RI[1]))		
 	return(X_nonmg,pc2_RI, equation_parameters, z_transform, pc_transform)
-
+	
 def evaluate_interval(nonmg: pd.DataFrame, mg: pd.DataFrame, lb: float, ub: float)->None:
 	"""Evaluate PC2-based interval for MG diagnosis"""
 	X_mg=df2array(mg)
