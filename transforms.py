@@ -38,10 +38,10 @@ def make_ztransform(X: np.array)->Callable[[np.array,bool],np.array]:
 		return(OUTPUT)
 	return(z_transform)
 
-def make_pctransform(X: np.array)->Callable[[np.array,bool],np.array]:
+def make_pctransform(X: np.array, return_decomposition=False)->Callable[[np.array,bool],np.array]:
 	"""Returns PC transform function for data model X"""
 	U,S,Vh=scipy.linalg.svd(X,full_matrices=False)
-	def pc_transform(INPUT: np.array,inverse=False, return_decomposition=False) -> np.array:
+	def pc_transform(INPUT: np.array,inverse=False) -> np.array:
 		"""Returns the PC transformed or inverse PC transformed version of the input np array"""
 		if inverse:
 			OUTPUT=INPUT@Vh
@@ -49,8 +49,8 @@ def make_pctransform(X: np.array)->Callable[[np.array,bool],np.array]:
 			OUTPUT=np.copy(INPUT)
 			for row in range(INPUT.shape[0]):
 				OUTPUT[row,:]=INPUT[row,:]@Vh.T
-		if return_decomposition:
-			return(OUTPUT, U, S, Vh)
-		else:
-			return(OUTPUT)
-	return(pc_transform)
+		return(OUTPUT)
+	if return_decomposition:
+		return(pc_transform, U, S, Vh)
+	else:
+		return(pc_transform)
