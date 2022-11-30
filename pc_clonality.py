@@ -7,7 +7,7 @@ Purpose: main point of entry into PC-clonality-index package
 
 This script will enable the user to derive a pc2-based equation and interval using either a user defined or
 the WashU reference nonmg cohort, to evaluate the sensitivity and specificity of the pc2-based
-interval for mg diagnosis using either a user defined or the Wash U mg cohorts, and to apply 
+interval for mg diagnosis using either a user defined or the Wash U mg cohort, and to apply 
 the pc2 based interval a new set of cases. The output behavior is controlled by a set of 
 optional command line arguments.
 
@@ -27,7 +27,6 @@ Functions:
 
 """
 
-#%% imports
 from optparse import OptionParser
 import pandas as pd 
 import pickle
