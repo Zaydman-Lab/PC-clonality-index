@@ -52,14 +52,17 @@ def plot_sflc(X_nonmg: np.array, pc2_RI: list[float,float], z_transform: Callabl
   line_katz = Line2D([0,1],[0,1],linestyle=':', color='black')
   line_pc2 = Line2D([0,1],[0,1],linestyle='--', color='black')
   ax.legend([line_katz, line_pc2],['Katzmann', 'PC2'])
+  plt.tight_layout()
   plt.savefig('./Output/case_1.png')
 
   if len(X_mg)>0:
     sns.scatterplot(x=X_mg[:,0],y=X_mg[:,1])
+    plt.tight_layout()
     plt.savefig('./Output/case_2.png')
 
   if X_cases:
     sns.scatterplot(x=X_cases[:,0],y=X_cases[:,1])
+    plt.tight_layout()
     plt.savefig('./Output/case_3.png')
   
 
