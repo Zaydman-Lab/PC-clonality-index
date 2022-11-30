@@ -16,16 +16,14 @@ generate_embedding(nonmg_path,lb,ub,output_path):
 
 #%% imports
 from optparse import OptionParser
-import os
-import generate
 import pandas as pd 
-import evaluate
-import embed
 import matplotlib.pyplot as plt
 import pickle
 from typing import Tuple
 import visualize
-
+import transforms
+import performance
+import numpy as np
 
 
 #%% helper functions
@@ -39,10 +37,10 @@ def derive_interval(nonmg: pd.DataFrame,lb: float,ub: float)->Tuple[pd.DataFrame
 	X_nonmg = df2array(nonmg)
 	L_nonmg = transforms.log_transform(X_nonmg) #apply log transform to X_nonmg
 	Z_transform = transforms.make_ztransform(L_nonmg) #compute z transform of L_nonmg
-	Z_nonmg = Z_tranform(log_nonmg) #apply z transform to L_nonmg
+	Z_nonmg = Z_transform(L_nonmg) #apply z transform to L_nonmg
 	pc_transform, U, S, Vh = transforms.make_pctransform(Z_nonmg,return_decomposition=True) #compute pc transform of Z_nonmg
 	pc2 = pc_transform(Z_nonmg)[:,1] #pc2 projections for nonmg cohort
-	pc2_RI = [np.percentile(pc2,lb),np.percentile(pc2,ub) #compute reference interval for pc2
+	pc2_RI = [np.percentile(pc2,lb),np.percentile(pc2,ub)] #compute reference interval for pc2
 	Vh_raw=log_transform(z_transform(Vh,inverse=True),inverse=True) #project right singular vectors from z space into raw sFLC space
 	equation_parameters = {'A': Vh_raw[0,0], #First right singular vector in raw space
 		'B': np.mean(log_transform(X_normal)[:,0]), #Mean of log transformed kappa values for non_mg cohort
