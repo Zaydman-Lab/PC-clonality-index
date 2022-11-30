@@ -15,7 +15,7 @@ import transforms
 from matplotlib.lines import Line2D   
 from typing import Callable
 
-def plot_sflc(X_nonmg: np.array, pc2_RI: list[float,float], z_transform: Callable[[np.array,bool],np.array], pc_transform: Callable[[np.array,bool],np.array], X_mg: np.array = False, X_cases: np.array = False, parameters: np.array = False, performance: np.array = False)->None:
+def plot_sflc(X_nonmg: np.array, pc2_RI: list[float,float], z_transform: Callable[[np.array,bool],np.array], pc_transform: Callable[[np.array,bool],np.array], X_mg: np.array = [], X_cases: np.array = [], parameters: bool = False, performance: bool = False)->None:
   """Saves .png image of plot of non-MG cohort with manufacturer's sFLC-ratio-based and PC2-based reference intervals superimposed"""
 
   # plot non-mg cohort as scatter plot
@@ -54,7 +54,7 @@ def plot_sflc(X_nonmg: np.array, pc2_RI: list[float,float], z_transform: Callabl
   ax.legend([line_katz, line_pc2],['Katzmann', 'PC2'])
   plt.savefig('./Output/case_1.png')
 
-  if X_mg:
+  if len(X_mg)>0:
     sns.scatterplot(x=X_mg[:,0],y=X_mg[:,1])
     plt.savefig('./Output/case_2.png')
 
