@@ -15,14 +15,14 @@ import transforms
 from matplotlib.lines import Line2D   
 from typing import Callable
 
-def plot_interval(X_nonmg: np.array, pc2_RI: list[float,float], z_transform: Callable[[np.array,bool],np.array], pc_transform: Callable[[np.array,bool],np.array])->None:
+def plot_sflc(X_nonmg: np.array, pc2_RI: list[float,float], z_transform: Callable[[np.array,bool],np.array], pc_transform: Callable[[np.array,bool],np.array], X_mg: np.array = False, X_cases: np.array = False, parameters: np.array = False, performance: np.array = False)->None:
   """Saves .png image of plot of non-MG cohort with manufacturer's sFLC-ratio-based and PC2-based reference intervals superimposed"""
 
   # plot non-mg cohort as scatter plot
   fig,ax=plt.subplots()
   fig.patch.set_facecolor('xkcd:white')
   fig.set_size_inches(4,4)
-  sns.scatterplot(x=X_nonmg[:,0],y=X_nonmg[:,1])
+  sns.scatterplot(x=X_nonmg[:,0],y=X_nonmg[:,1], color='grey')
   ax.set_xscale('log')
   ax.set_yscale('log')
   ax.set_xlabel(r'$[\kappa]\quad$(g/dL)')
@@ -53,3 +53,14 @@ def plot_interval(X_nonmg: np.array, pc2_RI: list[float,float], z_transform: Cal
   line_pc2 = Line2D([0,1],[0,1],linestyle='--', color='black')
   ax.legend([line_katz, line_pc2],['Katzmann', 'PC2'])
   plt.savefig('./Output/case_1.png')
+
+  if X_mg:
+    sns.scatterplot(x=X_mg[:,0],y=X_mg[:,1])
+    plt.savefig('./Output/case_2.png')
+
+  if X_cases:
+    sns.scatterplot(x=X_cases[:,0],y=X_cases[:,1])
+    plt.savefig('./Output/case_3.png')
+  
+
+  
