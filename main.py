@@ -51,6 +51,15 @@ def derive_interval(nonmg: pd.DataFrame,lb: float,ub: float)->Tuple[np.array,lis
 		'F': np.std(transforms.log_transform(X_nonmg)[:,1]) #Standard deviation of log transformed lambda values for non_mg cohort
 	} 
 	visualize.plot_interval(X_nonmg, pc2_RI, z_transform, pc_transform)
+	with open('./Output/pc_clonality_index.txt','w') as f:
+		f.write('PC clonality index equation parameters\n')
+		f.write('--------------------------------------\n')
+		for key in equation_parameters.keys():
+			f.write(f"\t%s = %.2f\n" % (key,equation_parameters[key]))
+		f.write('\n\nPC clonality index reference interval\n')
+		f.write('--------------------------------------\n')
+		f.write(f"%s %%ile = %.2f\n" % (lb,pc2_RI[0]))
+		f.write(f"%s %%ile = %.2f" % (ub,pc2_RI[1]))		
 	return(X_nonmg,pc2_RI, equation_parameters, z_transform, pc_transform)
 
 #%%
