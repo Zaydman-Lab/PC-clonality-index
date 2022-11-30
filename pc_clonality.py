@@ -84,7 +84,7 @@ def apply_interval(nonmg: pd.DataFrame,cases: pd.DataFrame, lb: float, ub: float
 	Z_cases = z_transform(L_cases) #apply z transform to L_cases
 	cases['pc2'] = pc_transform(Z_cases)[:,1] #pc2 projections for nonmg cohort
 	cases['abnormal?'] = ((cases['pc2'] > pc2_RI[0]) & (cases['pc2'] < pc2_RI[1])) #add abnormality flag per PC2-based interval
-	cases.to_csv('./Output/annotated_cases')
+	cases.to_csv('./Output/annotated_cases.csv')
 	visualize.plot_sflc(X_nonmg,pc2_RI, z_transform, pc_transform, X_cases=X_cases)
 
 
