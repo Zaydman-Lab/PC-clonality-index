@@ -32,7 +32,7 @@ def df2array(df: pd.DataFrame)->np.array:
 	X = np.column_stack((df['kappa'].to_numpy(), df['lambda'].to_numpy())) 
 	return(X)
 #%%
-def derive_interval(nonmg: pd.DataFrame,lb: float,ub: float)->Tuple[np.array,list[float,float],Callable[[np.array,float],np.array],Callable[[np.array,float],np.array]]:
+def derive_interval(nonmg: pd.DataFrame,lb: float,ub: float)->Tuple[np.array,list[float,float],Callable[[np.array,bool],np.array],Callable[[np.array,bool],np.array]]:
 	"""Derive PC2-based refence interval using WU nonmg cohort or user input nonmg cohort"""
 	X_nonmg = df2array(nonmg)
 	L_nonmg = transforms.log_transform(X_nonmg) #apply log transform to X_nonmg
@@ -129,7 +129,7 @@ def main():
 	else:
 		with open('./Data/WashU.p', 'rb') as file:
 			nonmg=pickle.load(file)
-	print(derive_interval(nonmg,lb,ub))
+	derive_interval(nonmg,lb,ub)
 			   
 	if options.mg_fpath:
 		mg = pd.read_csv(options.mg_fpath)
