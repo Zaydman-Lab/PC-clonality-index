@@ -22,7 +22,7 @@ import pickle
 from typing import Tuple, Callable
 import visualize
 import transforms
-import performance
+import evaluate
 import numpy as np
 
 
@@ -50,7 +50,7 @@ def derive_interval(nonmg: pd.DataFrame,lb: float,ub: float)->Tuple[np.array,lis
 		'E': np.mean(transforms.log_transform(X_nonmg)[:,1]), #Mean of log transformed lambda values for non_mg cohort
 		'F': np.std(transforms.log_transform(X_nonmg)[:,1]) #Standard deviation of log transformed lambda values for non_mg cohort
 	} 
-	visualize.plot_interval(X_nonmg, pc2_RI, z_transform, pc_transform)
+	visualize.plot_sflc(X_nonmg, pc2_RI, z_transform, pc_transform)
 	with open('./Output/pc_clonality_index.txt','w') as f:
 		f.write('PC clonality index equation parameters\n')
 		f.write('--------------------------------------\n')
@@ -68,10 +68,10 @@ def evaluate_interval(nonmg: pd.DataFrame, mg: pd.DataFrame, lb: float, ub: floa
 	X_mg=df2array(nonmg)
 	X_nonmg, pc2_RI, _, z_transform, pc_transform = derive_interval(nonmg,lb,ub)
 	performance = {}
-	performance.update(performance.SeSp_sFLCR(X_nonmg,X_mg,0.26,1.65)) #evaluate performance of manufacturer's sFLC-ratio-based interval
-	performance.update(performance.SeSp_PCA(X_nonmg, X_mg, pc2_RI, pc_transform, z_transform)) #evaluate performance of pc2-based interval
+	performance.update(evaluate.SeSp_sFLCR(X_nonmg,X_mg,0.26,1.65)) #evaluate performance of manufacturer's sFLC-ratio-based interval
+	performance.update(evaluate.SeSp_PCA(X_nonmg, X_mg, pc2_RI, pc_transform, z_transform)) #evaluate performance of pc2-based interval
 	pd.DataFrame(data=performance, index=['Measure']).T.to_csv('./Output/performance.csv')
-	visualize.evaluation(X_nonmg,X_mg, pc2_RI, z_transform, pc_transform)
+	visualize.plot_sflc(X_nonmg, pc2_RI, z_transform, pc_transform, X_mg)
 
 #%%
 def apply_interval(nonmg: pd.DataFrame,cases: pd.DataFrame, lb: float, ub: float):
@@ -83,7 +83,7 @@ def apply_interval(nonmg: pd.DataFrame,cases: pd.DataFrame, lb: float, ub: float
 	cases['pc2'] = pc_transform(Z_cases)[:,1] #pc2 projections for nonmg cohort
 	cases['abnormal?'] = ((cases['pc2'] > pc2_RI[0]) & (cases['pc2'] < pc2_RI[1])) #add abnormality flag per PC2-based interval
 	cases.to_csv('./Output/annotated_cases')
-	visualize.cases(cases,pc2_RI, z_transform, pc_transform)
+	visualize.plot_sflc(cases,pc2_RI, z_transform, pc_transform, X_cases)
 
 
 
