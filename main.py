@@ -11,7 +11,7 @@ Functions:
 
 
 generate_embedding(nonmg_path,lb,ub,output_path):
-    '''Returns tranfform object and embeddings'''
+    '''Returns tranform object and embeddings'''
 """
 
 #%% imports
@@ -34,8 +34,8 @@ def df2array(df: pd.DataFrame)->np.array:
 	X = np.column_stack((df['kappa'].to_numpy(), df['lambda'].to_numpy())) 
 	return(X)
 
-def case_1(nonmg: pd.DataFrame,lb: float,ub: float)->Tuple[pd.DataFrame]:
-	"""Returns PC2-based reference interval, dictionary of PC2 equation parameters, and functions for Z and pc transforms of non-MG cohort"""
+def derive_interval(nonmg: pd.DataFrame,lb: float,ub: float)->Tuple[pd.DataFrame]:
+	"""Derive PC2-based refence interval using WU nonmg cohort or user input nonmg cohort"""
 	X_nonmg = df2array(nonmg)
 	L_nonmg = transforms.log_transform(X_nonmg) #apply log transform to X_nonmg
 	Z_transform = transforms.make_ztransform(L_nonmg) #compute z transform of L_nonmg
@@ -53,8 +53,8 @@ def case_1(nonmg: pd.DataFrame,lb: float,ub: float)->Tuple[pd.DataFrame]:
 	visualize.plot_case1(X_nonmg, pc2_RI, z_transform, pc_transform)
 	return(X_nonmg,pc2_RI, equation_parameters, z_transform, pc_transform)
 
-def case_2(non_mg: pd.DataFrame, mg: pd.DataFrame, lb: float, ub: float)->dict:
-	"""Returns dictionary of performance metrics for manufacturers sFLC-ratio-based and PC2-based reference intervals"""
+def evaluate_interval(non_mg: pd.DataFrame, mg: pd.DataFrame, lb: float, ub: float)->dict:
+	"""Evaluate PC2-based interval for MG diagnosis"""
 	X_mg=df2array(non_mg)
 	X_nonmg, pc2_RI, equation_parameters, z_transform, pc_transform = case_1(non_mg,lb,ub)
         performance = {}
@@ -63,8 +63,8 @@ def case_2(non_mg: pd.DataFrame, mg: pd.DataFrame, lb: float, ub: float)->dict:
 	pd.DataFrame(data=performance_dict, index=['Measure']).T.to_csv('./Output/performance.csv')
         return(performance)
 
-def case3(nonmg: pd.DataFrame,cases: pd.DataFrame, lb: float, ub: floatß)->pd.DataFrame:
-	"""Returns PC2 embeddings and normality flags for input cases based on nonmg data model"""
+def apply_interval(nonmg: pd.DataFrame,cases: pd.DataFrame, lb: float, ub: floatß)->pd.DataFrame:
+	"""Apply PC2-based interval to new patient data"""
 	X_nonmg, pc2_RI, equation_parameters, z_transform, pc_transform = case_1(non_mg,lb,ub)	
 	X_cases = df2array(cases)
 	L_cases = transforms.log_transform(X_cases) #apply log transform to X_cases
@@ -104,15 +104,15 @@ def main():
     	else:
         	with open('./Data/WashU.p', 'rb') as file:
 			nonmg=pickle.load(file)
-    	case_1(nonmg,lg,ub)
+    	derive_inverval(nonmg,lg,ub)
 			   
     	if options.mg_fpath:
         	mg = pd.read_csv(options.mg_fpath)
-  		case_2(nonmg,mg,lb,ub)
+  		evaluate_interval(nonmg,mg,lb,ub)
 
 	if options.cases_fpath:
         	cases = pd.read_csv(options.cases_fpath)
-   		case_3(nonmg,cases,lb,ub)
+   		apply_interval(nonmg,cases,lb,ub)
 
 if __name__ == '__main__':
     main()
