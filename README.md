@@ -51,13 +51,13 @@ A: (6.88)
 
 B: mean of log(kappa) values in non-MG cohort (1.31)
 
-C: standard deviation of log(kappa) values in non-MG cohort
+C: standard deviation of log(kappa) values in non-MG cohort (0.87)
 
 D: (3.93)
 
-E: log of lambda values in non-MG cohort (0.88)
+E: mean of log(lambda) values in non-MG cohort (0.88)
 
-F: standard deviation of log(lambda) values in non-MG cohort
+F: standard deviation of log(lambda) values in non-MG cohort (0.68)
 
 The WashU-specific PCA_RI_low and PCA_RI_high are -0.542 and 0.584, respectively.
 
