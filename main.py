@@ -14,7 +14,7 @@ generate_embedding(nonmg_path,lb,ub,output_path):
     '''Returns tranfform object and embeddings'''
 """
 
-#%%
+#%% imports
 from optparse import OptionParser
 import os
 import generate
@@ -28,13 +28,11 @@ import visualize
 
 
 
-#%%
-
+#%% helper functions
 def df2array(df: pd.DataFrame)->np.array:
 	"""Returns np array of kappa and labmda values derived from input dataframe"""
 	X = np.column_stack((df['kappa'].to_numpy(), df['lambda'].to_numpy())) 
 	return(X)
-
 
 def case_1(nonmg: pd.DataFrame,lb: float,ub: float)->Tuple[pd.DataFrame]:
 	"""Returns PC2-based reference interval, dictionary of PC2 equation parameters, and functions for Z and pc transforms of non-MG cohort"""
@@ -62,9 +60,9 @@ def case_2(non_mg: pd.DataFrame, mg: pd.DataFrame, lb: float, ub: float)->dict:
         performance = {}
 	performance.update(evaluate.SeSp_sFLCR(X_nonmg,X_mg,0.26,1.65) #evaluate performance of manufacturer's sFLC-ratio-based interval
         performance.update(evaluate.SeSp_PCA(X_nonmg, X_mg, pc2_RI, pc_transform, z_transform) #evaluate performance of pc2-based interval
+	pd.DataFrame(data=performance_dict, index=['Measure']).T.to_csv('./Output/performance.csv')
         return(performance)
 
-#%%
 def case3(nonmg: pd.DataFrame,cases: pd.DataFrame)->pd.DataFrame:
 	"""Returns PC2 embeddings and normality flags for input cases based on nonmg data model"""
 	X_nonmg, pc2_RI, equation_parameters, z_transform, pc_transform = case_1(non_mg,lb,ub)	
@@ -72,68 +70,49 @@ def case3(nonmg: pd.DataFrame,cases: pd.DataFrame)->pd.DataFrame:
 	L_cases = transforms.log_transform(X_cases) #apply log transform to X_cases
 	Z_cases = Z_tranform(L_cases) #apply z transform to L_cases
 	cases['pc2'] = pc_transform(Z_cases)[:,1] #pc2 projections for nonmg cohort
-	cases['abnormal?'] = ((df['pc2'] > pc2_RI[0]) & (df['pc2'] < pc2_RI[1]))		   
+	cases['abnormal?'] = ((df['pc2'] > pc2_RI[0]) & (df['pc2'] < pc2_RI[1])) #add abnormality flag per PC2-based interval
     	return(cases)
 
-#%%
 def main():
+	parser = OptionParser()
+	parser.add_option("-n", "--nonmg",
+		    dest = "nonmg_fpath",
+		    help = "[optional] path to non-MG cohort csv file, default='.Data/WashU.p'")
+	parser.add_option("-m", "--mg",
+		    dest = "mg_fpath",
+		    help = "[optional] path to MG cohort csv file, default=None")   
+	parser.add_option("-c", "--cases",
+		    dest = "cases_fpath",
+		    help = "[optional] path to csv file for cases, default=None")  
+	parser.add_option("-l", "--lower",
+		    dest = "user_lb",
+		    help = "[optional] % lower bound for reference interval, default=2.5")  
+	parser.add_option("-u", "--upper",
+		    dest = "user_ub",
+		    help = "[optional] % upper bound for reference interval, default=97.5")    
+	(options, args) = parser.parse_args()
 
-    parser = OptionParser()
-    parser.add_option("-n", "--nonmg",
-                    dest = "nonmg_fpath",
-                    help = "[optional] path to non-MG cohort csv file, default='.Data/WashU.p'")
-    parser.add_option("-m", "--mg",
-                    dest = "mg_fpath",
-                    help = "[optional] path to MG cohort csv file, default=None")   
-    parser.add_option("-c", "--cases",
-                    dest = "cases_fpath",
-                    help = "[optional] path to csv file for cases, default=None")  
-    parser.add_option("-l", "--lower",
-                    dest = "user_lb",
-                    help = "[optional] % lower bound for reference interval, default=2.5")  
-    parser.add_option("-u", "--upper",
-                    dest = "user_ub",
-                    help = "[optional] % upper bound for reference interval, default=97.5")    
-    (options, args) = parser.parse_args()
+	if options.user_lb and options.user_ub:
+		lb=float(options.user_lb)
+		ub=float(options.user_ub)
+	else:
+		lb=2.5
+		ub=97.5			   
+		    
+	if options.nonmg_fpath:
+		nonmg = pd.read_csv(options.nonmg_fpath)
+    	else:
+        	with open('./Data/WashU.p', 'rb') as file:
+			nonmg=pickle.load(file)
+    	case_1(nonmg,lg,ub)
+			   
+    	if options.mg_fpath:
+        	mg = pd.read_csv(options.mg_fpath)
+  		case_2(nonmg,mg,lb,ub)
 
-    if options.nonmg_fpath:
-        nonmg = pd.read_csv(options.nonmg_fpath)
-    else:
-        with open('./Data/WashU.p', 'rb') as file:
-            nonmg=pickle.load(file)
-    
-    if options.mg_fpath:
-        mg = pd.read_csv(options.mg_fpath)
-    else:
-        mg = None
-        
-    if options.cases_fpath:
-        cases = pd.read_csv(options.cases_fpath)
-    else:
-        cases = None
-
-    if options.user_lb and options.user_ub:
-        lb=float(options.user_lb)
-        ub=float(options.user_ub)
-    else:
-        lb=2.5
-        ub=97.5      
-
-    PCA_RI, pc_dict, X_normal, z_transform, pc_transform = generate_embedding(nonmg_path,lb,ub,output_path)
-    pc_dict.update({'PCA_RI_low':PCA_RI[0], 'PCA_RI_high':PCA_RI[1]})
-
-    if mg_path!=None:
-        performance_dict=evaluate_ri(X_normal, PCA_RI, pc_transform, z_transform, mg_path)
-        performance_dict=pd.DataFrame(data=performance_dict, index=['Measure']).T
-        performance_dict.to_csv(output_path+'/performance.csv')
-    
-    if options.cases_fn!=None:
-        cases_path = options.cases_fn
-        df_cases = embed_cases(cases_path,z_transform, pc_transform, PCA_RI)
-        df_cases.to_csv(output_path+'/cases_pc2.csv',index=False)
-
-    df_pc_dict=pd.DataFrame(data=pc_dict, index=['var']).T
-    df_pc_dict.to_csv(output_path+'/pc_vars.csv')
+	if options.cases_fpath:
+        	cases = pd.read_csv(options.cases_fpath)
+   		case_3(nonmg,cases)
 
 if __name__ == '__main__':
     main()
