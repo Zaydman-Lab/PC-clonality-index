@@ -50,7 +50,7 @@ def derive_interval(nonmg: pd.DataFrame,lb: float,ub: float)->Tuple[np.array,lis
 		'E': np.mean(transforms.log_transform(X_nonmg)[:,1]), #Mean of log transformed lambda values for non_mg cohort
 		'F': np.std(transforms.log_transform(X_nonmg)[:,1]) #Standard deviation of log transformed lambda values for non_mg cohort
 	} 
-	visualize.plot_sflc(X_nonmg, pc2_RI, z_transform, pc_transform)
+	visualize.plot_sflc(X_nonmg, pc2_RI, z_transform, pc_transform, parameters=equation_parameters)
 	with open('./Output/pc_clonality_index.txt','w') as f:
 		f.write('PC clonality index equation parameters\n')
 		f.write('--------------------------------------\n')
@@ -72,19 +72,19 @@ def evaluate_interval(nonmg: pd.DataFrame, mg: pd.DataFrame, lb: float, ub: floa
 	performance.update(evaluate.SeSp_PCA(X_nonmg, X_mg, pc2_RI, pc_transform, z_transform)) #evaluate performance of pc2-based interval
 	# print(pd.DataFrame.from_dict(performance,orient='index'))
 	# pd.DataFrame(data=performance, index=['Measure']).T.to_csv('./Output/performance.csv')
-	visualize.plot_sflc(X_nonmg, pc2_RI, z_transform, pc_transform, X_mg)
+	visualize.plot_sflc(X_nonmg, pc2_RI, z_transform, pc_transform, X_mg=X_mg, performance=performance)
 
 #%%
 def apply_interval(nonmg: pd.DataFrame,cases: pd.DataFrame, lb: float, ub: float):
 	"""Apply PC2-based interval to new patient data"""
-	_, pc2_RI, _, z_transform, pc_transform = derive_interval(nonmg,lb,ub)
+	X_nonmg, pc2_RI, _, z_transform, pc_transform = derive_interval(nonmg,lb,ub)
 	X_cases = df2array(cases)
 	L_cases = transforms.log_transform(X_cases) #apply log transform to X_cases
 	Z_cases = z_transform(L_cases) #apply z transform to L_cases
 	cases['pc2'] = pc_transform(Z_cases)[:,1] #pc2 projections for nonmg cohort
 	cases['abnormal?'] = ((cases['pc2'] > pc2_RI[0]) & (cases['pc2'] < pc2_RI[1])) #add abnormality flag per PC2-based interval
 	cases.to_csv('./Output/annotated_cases')
-	visualize.plot_sflc(cases,pc2_RI, z_transform, pc_transform, X_cases)
+	visualize.plot_sflc(X_nonmg,pc2_RI, z_transform, pc_transform, X_cases=X_cases)
 
 
 

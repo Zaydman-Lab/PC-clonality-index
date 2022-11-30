@@ -15,13 +15,13 @@ import transforms
 from matplotlib.lines import Line2D   
 from typing import Callable
 
-def plot_sflc(X_nonmg: np.array, pc2_RI: list[float,float], z_transform: Callable[[np.array,bool],np.array], pc_transform: Callable[[np.array,bool],np.array], X_mg: np.array = [], X_cases: np.array = [], parameters: bool = False, performance: bool = False)->None:
+def plot_sflc(X_nonmg: np.array, pc2_RI: list[float,float], z_transform: Callable[[np.array,bool],np.array], pc_transform: Callable[[np.array,bool],np.array], X_mg: np.array = [], X_cases: np.array = [], parameters: dict = False, performance: dict = False)->None:
   """Saves .png image of plot of non-MG cohort with manufacturer's sFLC-ratio-based and PC2-based reference intervals superimposed"""
 
   # plot non-mg cohort as scatter plot
   fig,ax=plt.subplots()
   fig.patch.set_facecolor('xkcd:white')
-  fig.set_size_inches(4,4)
+  fig.set_size_inches(6,6)
   sns.scatterplot(x=X_nonmg[:,0],y=X_nonmg[:,1], color='grey')
   ax.set_xscale('log')
   ax.set_yscale('log')
@@ -51,7 +51,11 @@ def plot_sflc(X_nonmg: np.array, pc2_RI: list[float,float], z_transform: Callabl
     ax.plot(UB[:,0],UB[:,1],'--k')
   line_katz = Line2D([0,1],[0,1],linestyle=':', color='black')
   line_pc2 = Line2D([0,1],[0,1],linestyle='--', color='black')
-  ax.legend([line_katz, line_pc2],['Katzmann', 'PC2'])
+  ax.legend([line_katz, line_pc2],['Katzmann: RI = 0.26≤sFLC-ratio≤1.65', 'PCCI: RI = %.2f≤PCCI≤%.2f' %(pc2_RI[0],pc2_RI[1])])
+  if parameters:
+    plt.title(r'PCCI=$%.2f*(\frac{log(kappa)-{%.2f}}{%.2f}) + %.2f*(\frac{log(lambda)-{%.2f}}{%.2f})$' %(parameters['A'],parameters['B'], parameters['C'], parameters['D'], parameters['E'], parameters['F']))
+  if performance:
+    plt.title("Manufacturer's: Se=%2.f, Sp=%.2f\nPCCI: Se=%.2f, Sp=%.2f" %(performance["Manufacturer's sFLC-ratio interval"]['Se'], performance["Manufacturer's sFLC-ratio interval"]['Sp'], performance['PC clonality index interval']['Se'], performance['PC clonality index interval']['Sp']))
   plt.tight_layout()
   plt.savefig('./Output/case_1.png')
 
@@ -60,7 +64,7 @@ def plot_sflc(X_nonmg: np.array, pc2_RI: list[float,float], z_transform: Callabl
     plt.tight_layout()
     plt.savefig('./Output/case_2.png')
 
-  if X_cases:
+  if len(X_cases)>0:
     sns.scatterplot(x=X_cases[:,0],y=X_cases[:,1])
     plt.tight_layout()
     plt.savefig('./Output/case_3.png')
