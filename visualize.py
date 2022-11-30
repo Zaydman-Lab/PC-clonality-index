@@ -8,6 +8,12 @@ Purpose: create visualizations for PC clonality package
 
 """
 
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+import transforms
+from matplotlib.lines import Line2D   
+
 def plot_case1(X_nonmg: np.array, pc2_RI: list[float,float], z_transform: Callable[[np.array,bool],np.array], pc_transform: Callable[[np.array,bool],np.array])->None:
   """Saves .png image of plot of non-MG cohort with manufacturer's sFLC-ratio-based and PC2-based reference intervals superimposed"""
 
@@ -36,8 +42,8 @@ def plot_case1(X_nonmg: np.array, pc2_RI: list[float,float], z_transform: Callab
   # Add pc2-based interval
   pc2_LB=np.column_stack((np.linspace(-3,7,num=50),np.ones(50)*pc2_RI[0]))
   pc2_UB=np.column_stack((np.linspace(-3,7,num=50),np.ones(50)*pc2_RI[1]))    
-  LB=log_transform(z_transform(pc_transform(pc2_LB,inverse=True),inverse=True),inverse=True)
-  UB=log_transform(z_transform(pc_transform(pc2_UB,inverse=True),inverse=True),inverse=True)
+  LB=transforms.log_transform(z_transform(pc_transform(pc2_LB,inverse=True),inverse=True),inverse=True)
+  UB=transforms.log_transform(z_transform(pc_transform(pc2_UB,inverse=True),inverse=True),inverse=True)
   if isinstance(LB,np.ndarray): #WHY IS THIS NEEDED?
     ax.plot(LB[:,0],LB[:,1],'--k')
   if isinstance(UB,np.ndarray):
