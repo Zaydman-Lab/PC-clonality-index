@@ -43,19 +43,20 @@ This will create the Conda environment and install the following dependencies:
 - vars.csv: contains the PC2 clonality index-based interval ('PCA_RI_low' and 'PCA_RI_high') as well as the variables needed to calculate the PC2 clonality index for new cases. The equation takes the form of:
 
 ```math
-A*(\frac{log(kappa)-\overline{kappa})}{\sigma{kappa}}) + B*\log(\frac{(lambda)-\overline{lambda})}{\sigma{lambda}})
+A*(\frac{B-\overline{B})}{\sigma{B}}) + B*\log(\frac{(lambda)-\overline{lambda})}{\sigma{lambda}})
 ```
 Description of variables (WashU-specific values)
 
 A: (6.88)
 
+B: log of kappa values in non-MG cohort (1.31)
+
 B: (3.93)
 
-C: mean of kappa values in non-MG cohort (1.31)
 
-D: mean of lambda values in non-MG cohort (0.88)
+D: log of lambda values in non-MG cohort (0.88)
 
-E: standard deviation of kappa values in non-MG cohort (0.87)
+E: log of standard deviation of kappa values in non-MG cohort (0.87)
 
 F: mean of lambda values in non-MG cohort (0.68)
 
