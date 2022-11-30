@@ -63,7 +63,7 @@ def case_2(non_mg: pd.DataFrame, mg: pd.DataFrame, lb: float, ub: float)->dict:
 	pd.DataFrame(data=performance_dict, index=['Measure']).T.to_csv('./Output/performance.csv')
         return(performance)
 
-def case3(nonmg: pd.DataFrame,cases: pd.DataFrame)->pd.DataFrame:
+def case3(nonmg: pd.DataFrame,cases: pd.DataFrame, lb: float, ub: floatß)->pd.DataFrame:
 	"""Returns PC2 embeddings and normality flags for input cases based on nonmg data model"""
 	X_nonmg, pc2_RI, equation_parameters, z_transform, pc_transform = case_1(non_mg,lb,ub)	
 	X_cases = df2array(cases)
@@ -112,7 +112,7 @@ def main():
 
 	if options.cases_fpath:
         	cases = pd.read_csv(options.cases_fpath)
-   		case_3(nonmg,cases)
+   		case_3(nonmg,cases,lb,ub)
 
 if __name__ == '__main__':
     main()
