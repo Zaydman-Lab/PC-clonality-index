@@ -1,5 +1,4 @@
 import numpy as np
-import generate
 
 def calc_ratio(X):
     return(X[:,0]/X[:,1])
