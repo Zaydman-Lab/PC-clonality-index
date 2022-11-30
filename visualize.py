@@ -13,8 +13,9 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import transforms
 from matplotlib.lines import Line2D   
+from typing import Callable
 
-def plot_case1(X_nonmg: np.array, pc2_RI: list[float,float], z_transform: Callable[[np.array,bool],np.array], pc_transform: Callable[[np.array,bool],np.array])->None:
+def plot_interval(X_nonmg: np.array, pc2_RI: list[float,float], z_transform: Callable[[np.array,bool],np.array], pc_transform: Callable[[np.array,bool],np.array])->None:
   """Saves .png image of plot of non-MG cohort with manufacturer's sFLC-ratio-based and PC2-based reference intervals superimposed"""
 
   # plot non-mg cohort as scatter plot
