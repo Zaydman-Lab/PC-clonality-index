@@ -73,7 +73,7 @@ def evaluate_interval(nonmg: pd.DataFrame, mg: pd.DataFrame, lb: float, ub: floa
 	performance=pd.concat(performances,axis=0)
 	with open('./Output/performance.txt','w') as outfile:
 		performance.to_string(outfile)
-	visualize.plot_sflc(X_nonmg, pc2_RI, z_transform, pc_transform, X_mg=X_mg)
+	visualize.plot_sflc(X_nonmg, pc2_RI, z_transform, pc_transform, X_mg=X_mg, performance=performance)
 
 #%%
 def apply_interval(nonmg: pd.DataFrame,cases: pd.DataFrame, lb: float, ub: float):
