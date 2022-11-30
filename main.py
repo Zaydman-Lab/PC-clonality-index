@@ -19,7 +19,7 @@ from optparse import OptionParser
 import pandas as pd 
 import matplotlib.pyplot as plt
 import pickle
-from typing import Tuple
+from typing import Tuple, Callable
 import visualize
 import transforms
 import performance
@@ -32,7 +32,7 @@ def df2array(df: pd.DataFrame)->np.array:
 	X = np.column_stack((df['kappa'].to_numpy(), df['lambda'].to_numpy())) 
 	return(X)
 #%%
-def derive_interval(nonmg: pd.DataFrame,lb: float,ub: float)->Tuple[pd.DataFrame]:
+def derive_interval(nonmg: pd.DataFrame,lb: float,ub: float)->Tuple[np.array,list[float,float],Callable[[np.array,float],np.array],Callable[[np.array,float],np.array]]:
 	"""Derive PC2-based refence interval using WU nonmg cohort or user input nonmg cohort"""
 	X_nonmg = df2array(nonmg)
 	L_nonmg = transforms.log_transform(X_nonmg) #apply log transform to X_nonmg
@@ -63,7 +63,7 @@ def evaluate_interval(nonmg: pd.DataFrame, mg: pd.DataFrame, lb: float, ub: floa
 	performance.update(performance.SeSp_PCA(X_nonmg, X_mg, pc2_RI, pc_transform, z_transform)) #evaluate performance of pc2-based interval
 	pd.DataFrame(data=performance, index=['Measure']).T.to_csv('./Output/performance.csv')
 	visualize.evaluation(X_nonmg,X_mg, pc2_RI, z_transform, pc_transform)
-	return(performance)
+
 #%%
 def apply_interval(nonmg: pd.DataFrame,cases: pd.DataFrame, lb: float, ub: float)->pd.DataFrame:
 	"""Apply PC2-based interval to new patient data"""
@@ -73,8 +73,9 @@ def apply_interval(nonmg: pd.DataFrame,cases: pd.DataFrame, lb: float, ub: float
 	Z_cases = z_transform(L_cases) #apply z transform to L_cases
 	cases['pc2'] = pc_transform(Z_cases)[:,1] #pc2 projections for nonmg cohort
 	cases['abnormal?'] = ((cases['pc2'] > pc2_RI[0]) & (cases['pc2'] < pc2_RI[1])) #add abnormality flag per PC2-based interval
+	cases.to_csv('./Output/annotated_cases')
 	visualize.cases(cases,pc2_RI, z_transform, pc_transform)
-	return(cases)
+
 
 
 #%%
