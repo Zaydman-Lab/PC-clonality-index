@@ -30,11 +30,11 @@ def make_ztransform(X: np.array)->Callable[[np.array,bool],np.array]:
 		"""Returns the z transformed or inverse z transformed version of the input np array"""
 		OUTPUT=np.copy(INPUT)
 		if inverse:
-		    for col in range(INPUT.shape[1]):
-			OUTPUT[:,col]=INPUT[:,col]*np.std(X[:,col])+np.mean(X[:,col])
+			for col in range(INPUT.shape[1]):
+				OUTPUT[:,col]=INPUT[:,col]*np.std(X[:,col])+np.mean(X[:,col])
 		else:
-		    for col in range(INPUT.shape[1]):
-			OUTPUT[:,col]=(INPUT[:,col]-np.mean(X[:,col]))/np.std(X[:,col])
+			for col in range(INPUT.shape[1]):
+				OUTPUT[:,col]=(INPUT[:,col]-np.mean(X[:,col]))/np.std(X[:,col])
 		return(OUTPUT)
 	return(z_transform)
 
