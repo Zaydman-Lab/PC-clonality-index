@@ -70,7 +70,8 @@ def evaluate_interval(nonmg: pd.DataFrame, mg: pd.DataFrame, lb: float, ub: floa
 	performance = {}
 	performance.update(evaluate.SeSp_sFLCR(X_nonmg,X_mg,0.26,1.65)) #evaluate performance of manufacturer's sFLC-ratio-based interval
 	performance.update(evaluate.SeSp_PCA(X_nonmg, X_mg, pc2_RI, pc_transform, z_transform)) #evaluate performance of pc2-based interval
-	pd.DataFrame(data=performance, index=['Measure']).T.to_csv('./Output/performance.csv')
+	# print(pd.DataFrame.from_dict(performance,orient='index'))
+	# pd.DataFrame(data=performance, index=['Measure']).T.to_csv('./Output/performance.csv')
 	visualize.plot_sflc(X_nonmg, pc2_RI, z_transform, pc_transform, X_mg)
 
 #%%
