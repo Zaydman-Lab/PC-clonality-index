@@ -40,6 +40,7 @@ This will create the Conda environment and install the following dependencies:
 #### Usage
 ```python pc_clonality.py -n path_to_non_mg.csv```
 #### Outputs
+- cases_1.png: .png image of plot of non-MG cohort with manufacturer's sFLC-ratio-based and PC2-based reference intervals superimposed
 - vars.csv: contains the PC2 clonality index-based interval ('PCA_RI_low' and 'PCA_RI_high') as well as the variables needed to calculate the PC2 clonality index for new cases. The equation takes the form of:
 
 ```math
@@ -68,7 +69,8 @@ The WashU-specific PCA_RI_low and PCA_RI_high are -0.542 and 0.584, respectively
 #### Usage
 ```python pc_clonality.py -n path_to_non_mg.csv -c path_to_cases.csv```
 #### Output
-- pc2_cases.csv will contain four columns containing the kappa values, lambda values, PC2 clonality index, and an abnormal flag (0 for normal, 1 for abnormal) for each case.
+- pc2_cases.csv: contains four columns containing the kappa values, lambda values, PC2 clonality index, and an abnormal flag (0 for normal, 1 for abnormal) for each case.
+- cases_2.png: .png image of plot of non-MG cohort and MG cohort with manufacturer's sFLC-ratio-based and PC2-based reference intervals superimposed
 
 ### Case 3: Evaluating Sensitivity and Specificity
 #### Inputs
@@ -78,6 +80,7 @@ The WashU-specific PCA_RI_low and PCA_RI_high are -0.542 and 0.584, respectively
 ```python pc_clonality.py -n path_to_non_mg.csv -m path_to_mg.csv```
 #### Output
 - "performance.csv" will contain the sensitivity and specificity for the manufacturer's sFLC-ratio-based interval ("sFLC_Sp" and "sFLC_Se") and PC2 clonality index-based reference interval ("PC_Sp", "PC_Se"). 
+- cases_3.png: .png image of plot of non-MG cohort and cases with manufacturer's sFLC-ratio-based and PC2-based reference intervals superimposed
 
 ### Defining custom interval bounds
 By default, PC-clonality-index will calculate the PC2-metric-based reference interval using a 95% (2.5-97.5%ile) diagnostic interval. These bounds can be customized by providing "-l" and "-u" flags. For example, to define the PC2 metric equation and a corresponding 90% reference interval, run the following:
