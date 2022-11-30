@@ -50,7 +50,7 @@ def derive_interval(nonmg: pd.DataFrame,lb: float,ub: float)->Tuple[pd.DataFrame
 		'D': Vh_raw[0,1], #Second right singular vector in raw space                      
 		'E': np.mean(log_transform(X_normal)[:,1]), #Mean of log transformed lambda values for non_mg cohort
 		'F': np.std(log_transform(X_normal)[:,1])} #Standard deviation of log transformed lambda values for non_mg cohort
-	visualize.plot_case1(X_nonmg, pc2_RI, z_transform, pc_transform)
+	visualize.new_interval(X_nonmg, pc2_RI, z_transform, pc_transform)
 	return(X_nonmg,pc2_RI, equation_parameters, z_transform, pc_transform)
 
 def evaluate_interval(non_mg: pd.DataFrame, mg: pd.DataFrame, lb: float, ub: float)->dict:
@@ -61,6 +61,7 @@ def evaluate_interval(non_mg: pd.DataFrame, mg: pd.DataFrame, lb: float, ub: flo
 	performance.update(evaluate.SeSp_sFLCR(X_nonmg,X_mg,0.26,1.65) #evaluate performance of manufacturer's sFLC-ratio-based interval
         performance.update(evaluate.SeSp_PCA(X_nonmg, X_mg, pc2_RI, pc_transform, z_transform) #evaluate performance of pc2-based interval
 	pd.DataFrame(data=performance_dict, index=['Measure']).T.to_csv('./Output/performance.csv')
+	visualize.evaluation(X_nonmg,X_mg, pc2_RI, z_transform, pc_transform)
         return(performance)
 
 def apply_interval(nonmg: pd.DataFrame,cases: pd.DataFrame, lb: float, ub: floatß)->pd.DataFrame:
@@ -71,6 +72,7 @@ def apply_interval(nonmg: pd.DataFrame,cases: pd.DataFrame, lb: float, ub: float
 	Z_cases = Z_tranform(L_cases) #apply z transform to L_cases
 	cases['pc2'] = pc_transform(Z_cases)[:,1] #pc2 projections for nonmg cohort
 	cases['abnormal?'] = ((df['pc2'] > pc2_RI[0]) & (df['pc2'] < pc2_RI[1])) #add abnormality flag per PC2-based interval
+	visualize.cases(cases,pc2_RI, z_transform, pc_transform)
     	return(cases)
 
 def main():
