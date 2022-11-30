@@ -67,12 +67,12 @@ def evaluate_interval(nonmg: pd.DataFrame, mg: pd.DataFrame, lb: float, ub: floa
 	"""Evaluate PC2-based interval for MG diagnosis"""
 	X_mg=df2array(mg)
 	X_nonmg, pc2_RI, _, z_transform, pc_transform = derive_interval(nonmg,lb,ub)
-	performance = {}
-	performance.update(evaluate.SeSp_sFLCR(X_nonmg,X_mg,0.26,1.65)) #evaluate performance of manufacturer's sFLC-ratio-based interval
-	performance.update(evaluate.SeSp_PCA(X_nonmg, X_mg, pc2_RI, pc_transform, z_transform)) #evaluate performance of pc2-based interval
-	# print(pd.DataFrame.from_dict(performance,orient='index'))
-	# pd.DataFrame(data=performance, index=['Measure']).T.to_csv('./Output/performance.csv')
-	visualize.plot_sflc(X_nonmg, pc2_RI, z_transform, pc_transform, X_mg=X_mg, performance=performance)
+	performances=[]
+	performances.append(pd.DataFrame.from_dict(evaluate.SeSp_sFLCR(X_nonmg,X_mg,0.26,1.65),orient='index'))
+	performances.append(pd.DataFrame.from_dict(evaluate.SeSp_PCA(X_nonmg, X_mg, pc2_RI, pc_transform, z_transform),orient='index'))
+	with open('./Output/performance.txt','w') as outfile:
+		pd.concat(performances,axis=0).to_string(outfile)
+	visualize.plot_sflc(X_nonmg, pc2_RI, z_transform, pc_transform, X_mg)
 
 #%%
 def apply_interval(nonmg: pd.DataFrame,cases: pd.DataFrame, lb: float, ub: float):
