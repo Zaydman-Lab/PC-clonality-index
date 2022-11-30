@@ -27,11 +27,42 @@ import numpy as np
 
 
 #%% helper functions
+def parse_args()->Tuple[str]:
+	"""Returns parsed arguments"""
+	parser = OptionParser()
+	parser.add_option(
+		"-n", "--nonmg",
+		dest = "nonmg_fpath",
+		help = "[optional] path to non-MG cohort csv file, default='.Data/WashU.p'"
+	)
+	parser.add_option(
+		"-m", "--mg",
+		dest = "mg_fpath",
+		help = "[optional] path to MG cohort csv file, default=None"
+	)   
+	parser.add_option(
+		"-c", "--cases",
+		dest = "cases_fpath",
+		help = "[optional] path to csv file for cases, default=None"
+	)  
+	parser.add_option(
+		"-l", "--lower",
+		dest = "user_lb",
+		help = "[optional] % lower bound for reference interval, default=2.5"
+	)  
+	parser.add_option(
+		"-u", "--upper",
+		dest = "user_ub",
+		help = "[optional] % upper bound for reference interval, default=97.5"
+	)    
+	(options, args) = parser.parse_args()
+	return(options)	
+
 def df2array(df: pd.DataFrame)->np.array:
 	"""Returns np array of kappa and labmda values derived from input dataframe"""
 	X = np.column_stack((df['kappa'].to_numpy(), df['lambda'].to_numpy())) 
 	return(X)
-#%%
+
 def derive_interval(nonmg: pd.DataFrame,lb: float,ub: float)->Tuple[np.array,list[float,float],Callable[[np.array,bool],np.array],Callable[[np.array,bool],np.array]]:
 	"""Derive PC2-based refence interval using WU nonmg cohort or user input nonmg cohort"""
 	X_nonmg = df2array(nonmg)
@@ -62,7 +93,6 @@ def derive_interval(nonmg: pd.DataFrame,lb: float,ub: float)->Tuple[np.array,lis
 		f.write(f"\t%s %%ile = %.2f" % (ub,pc2_RI[1]))		
 	return(X_nonmg,pc2_RI, equation_parameters, z_transform, pc_transform)
 
-#%%
 def evaluate_interval(nonmg: pd.DataFrame, mg: pd.DataFrame, lb: float, ub: float):
 	"""Evaluate PC2-based interval for MG diagnosis"""
 	X_mg=df2array(mg)
@@ -75,7 +105,6 @@ def evaluate_interval(nonmg: pd.DataFrame, mg: pd.DataFrame, lb: float, ub: floa
 		performance.to_string(outfile)
 	visualize.plot_sflc(X_nonmg, pc2_RI, z_transform, pc_transform, X_mg=X_mg)
 
-#%%
 def apply_interval(nonmg: pd.DataFrame,cases: pd.DataFrame, lb: float, ub: float):
 	"""Apply PC2-based interval to new patient data"""
 	X_nonmg, pc2_RI, _, z_transform, pc_transform = derive_interval(nonmg,lb,ub)
@@ -90,57 +119,42 @@ def apply_interval(nonmg: pd.DataFrame,cases: pd.DataFrame, lb: float, ub: float
 
 
 #%%
-def main():
-	parser = OptionParser()
-	parser.add_option(
-		"-n", "--nonmg",
-		dest = "nonmg_fpath",
-		help = "[optional] path to non-MG cohort csv file, default='.Data/WashU.p'"
-	)
-	parser.add_option(
-		"-m", "--mg",
-		dest = "mg_fpath",
-		help = "[optional] path to MG cohort csv file, default=None"
-	)   
-	parser.add_option(
-		"-c", "--cases",
-		dest = "cases_fpath",
-		help = "[optional] path to csv file for cases, default=None"
-	)  
-	parser.add_option(
-		"-l", "--lower",
-		dest = "user_lb",
-		help = "[optional] % lower bound for reference interval, default=2.5"
-	)  
-	parser.add_option(
-		"-u", "--upper",
-		dest = "user_ub",
-		help = "[optional] % upper bound for reference interval, default=97.5"
-	)    
-	(options, args) = parser.parse_args()
+def main(nonmg_fpath=None,mg_fpath=None,cases_fpath=None,lb=0.25,ub=97.5)->None:
+	"""Generates output per user specified options"""
+	if nonmg_fpath:
+		nonmg = pd.read_csv(options.nonmg_fpath)
+	else:
+		with open('./Data/WashU.p', 'rb') as file:
+			nonmg=pickle.load(file)
+			   
+	if mg_fpath:
+		mg = pd.read_csv(options.mg_fpath)
+		evaluate_interval(nonmg,mg,lb,ub)
+
+	if cases_fpath:
+		cases = pd.read_csv(options.cases_fpath)
+		apply_interval(nonmg,cases,lb,ub)
+
+	if mg_fpath==None and cases_fpath==None:
+		derive_interval(nonmg,lb,ub)
+
+
+
+if __name__ == '__main__':
+	options=parse_args()
 
 	if options.user_lb and options.user_ub:
 		lb=float(options.user_lb)
 		ub=float(options.user_ub)
 	else:
 		lb=2.5
-		ub=97.5			   
-		    
-	if options.nonmg_fpath:
-		nonmg = pd.read_csv(options.nonmg_fpath)
-	else:
-		with open('./Data/WashU.p', 'rb') as file:
-			nonmg=pickle.load(file)
-	derive_interval(nonmg,lb,ub)
-			   
-	if options.mg_fpath:
-		mg = pd.read_csv(options.mg_fpath)
-		evaluate_interval(nonmg,mg,lb,ub)
+		ub=97.5	
 
-	if options.cases_fpath:
-		cases = pd.read_csv(options.cases_fpath)
-		apply_interval(nonmg,cases,lb,ub)
-
-if __name__ == '__main__':
-    main()
+	main(
+		nonmg_fpath=options.nonmg_fpath,
+		mg_fpath=options.mg_fpath,
+		cases_fpath=options.cases_fpath,
+		lb=lb,
+		ub=ub
+	)
 # %%
