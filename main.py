@@ -42,12 +42,14 @@ def derive_interval(nonmg: pd.DataFrame,lb: float,ub: float)->Tuple[pd.DataFrame
 	pc2 = pc_transform(Z_nonmg)[:,1] #pc2 projections for nonmg cohort
 	pc2_RI = [np.percentile(pc2,lb),np.percentile(pc2,ub)] #compute reference interval for pc2
 	Vh_raw=transforms.log_transform(z_transform(Vh,inverse=True),inverse=True) #project right singular vectors from z space into raw sFLC space
-	equation_parameters = {'A': Vh_raw[0,0], #First right singular vector in raw space
+	equation_parameters = {
+		'A': Vh_raw[0,0], #First right singular vector in raw space
 		'B': np.mean(transforms.log_transform(X_nonmg)[:,0]), #Mean of log transformed kappa values for non_mg cohort
 		'C': np.std(transforms.log_transform(X_nonmg)[:,0]), #Standard deviation of log transformed kappa values for non_mg cohort
 		'D': Vh_raw[0,1], #Second right singular vector in raw space                      
 		'E': np.mean(transforms.log_transform(X_nonmg)[:,1]), #Mean of log transformed lambda values for non_mg cohort
-		'F': np.std(transforms.log_transform(X_nonmg)[:,1])} #Standard deviation of log transformed lambda values for non_mg cohort
+		'F': np.std(transforms.log_transform(X_nonmg)[:,1]) #Standard deviation of log transformed lambda values for non_mg cohort
+	} 
 	visualize.plot_interval(X_nonmg, pc2_RI, z_transform, pc_transform)
 	return(X_nonmg,pc2_RI, equation_parameters, z_transform, pc_transform)
 
@@ -78,21 +80,31 @@ def apply_interval(nonmg: pd.DataFrame,cases: pd.DataFrame, lb: float, ub: float
 #%%
 def main():
 	parser = OptionParser()
-	parser.add_option("-n", "--nonmg",
+	parser.add_option(
+		"-n", "--nonmg",
 		dest = "nonmg_fpath",
-		help = "[optional] path to non-MG cohort csv file, default='.Data/WashU.p'")
-	parser.add_option("-m", "--mg",
+		help = "[optional] path to non-MG cohort csv file, default='.Data/WashU.p'"
+	)
+	parser.add_option(
+		"-m", "--mg",
 		dest = "mg_fpath",
-		help = "[optional] path to MG cohort csv file, default=None")   
-	parser.add_option("-c", "--cases",
+		help = "[optional] path to MG cohort csv file, default=None"
+	)   
+	parser.add_option(
+		"-c", "--cases",
 		dest = "cases_fpath",
-		help = "[optional] path to csv file for cases, default=None")  
-	parser.add_option("-l", "--lower",
+		help = "[optional] path to csv file for cases, default=None"
+	)  
+	parser.add_option(
+		"-l", "--lower",
 		dest = "user_lb",
-		help = "[optional] % lower bound for reference interval, default=2.5")  
-	parser.add_option("-u", "--upper",
+		help = "[optional] % lower bound for reference interval, default=2.5"
+	)  
+	parser.add_option(
+		"-u", "--upper",
 		dest = "user_ub",
-		help = "[optional] % upper bound for reference interval, default=97.5")    
+		help = "[optional] % upper bound for reference interval, default=97.5"
+	)    
 	(options, args) = parser.parse_args()
 
 	if options.user_lb and options.user_ub:
